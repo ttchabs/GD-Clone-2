@@ -957,10 +957,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb218ee552747d439e81a3c72b2e81f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitbox: {fileID: 419822408581116602, guid: a0c833c0387db284c8cd0d5b74039534, type: 3}
+  projectilePrefab: {fileID: 0}
+  firePoint: {fileID: 0}
   projectileSpeed: 0
   projectileLifetime: 0.2
+  projectileDamage: 10
   targetingRange: 2
+  muzzleFlash: {fileID: 0}
+  muzzleFlashDuration: 0.1
 --- !u!4 &2002074888
 Transform:
   m_ObjectHideFlags: 0

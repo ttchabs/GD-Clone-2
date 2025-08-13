@@ -2,41 +2,79 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ProjectileScript : MonoBehaviour
 {
-    [SerializeField] private float lifetime;
-    [SerializeField] private float speed;
+    [Header("Projectile Settings")]
+    [SerializeField] private float lifetime = 3f;
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float damage = 10f;
     
-    private Collider2D hitbox;
-    private Vector3 pos;
+    [Header("Movement")]
+    [SerializeField] private bool moveRight = true;
+    
+    private Rigidbody2D rb;
+    private bool hasHitTarget = false;
+    
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         
-        hitbox = GetComponent<Collider2D>();
+        
+        float direction = moveRight ? 1f : -1f;
+        rb.velocity = new Vector2(speed * direction, 0);
+        
+       
+        Destroy(gameObject, lifetime);
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        pos = transform.position;
-        pos.x += speed;
-        transform.position = pos;
-        lifetime -= Time.deltaTime;
-        if (lifetime <= 0)
+        // destroy if moving too slowly (hit something)
+        if (Mathf.Abs(rb.velocity.x) < 0.1f && !hasHitTarget)
         {
-            print("DEAD");
-            Destroy(this);
-        }
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            print("ATTACK HIT");
+            DestroyProjectile();
         }
     }
     
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (hasHitTarget) return;
+        
+        if (other.CompareTag("Player"))
+        {
+            // damage  player
+            HealthManager healthManager = other.GetComponent<HealthManager>();
+            if (healthManager != null)
+            {
+                healthManager.updateHealth(-damage);
+              
+            }
+            
+            hasHitTarget = true;
+            DestroyProjectile();
+        }
+        else if (other.CompareTag("Ground") || other.CompareTag("Wall"))
+        {
+           
+            hasHitTarget = true;
+            DestroyProjectile();
+        }
+    }
+    
+    private void DestroyProjectile()
+    {
+        // we can add visual effects here
+        Destroy(gameObject);
+    }
+    
+    public void SetDirection(bool goRight)
+    {
+        moveRight = goRight;
+        if (rb != null)
+        {
+            float direction = moveRight ? 1f : -1f;
+            rb.velocity = new Vector2(speed * direction, rb.velocity.y);
+        }
+    }
 }
