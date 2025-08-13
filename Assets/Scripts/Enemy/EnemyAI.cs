@@ -47,6 +47,8 @@ public class EnemyAI : MonoBehaviour
     private float attackTargetingRange;
     private float attackCooldownTime;
     private Vector2 resultv2;
+
+    public Transform attackPoint;
     
     
  
@@ -280,7 +282,7 @@ private void HandleAttacking()
     {
         if (animator != null)
         {
-            //animator.setTrigger("mellee")
+                animator.SetTrigger("Melee");
         }
         
     }
@@ -403,6 +405,8 @@ private void HandleAttacking()
     {
         facingRight = !facingRight;
         spriteRenderer.flipX = !facingRight;
+
+      
     }
     
     private void UpdateEdgeCheckPosition()
