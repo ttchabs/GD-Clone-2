@@ -24,7 +24,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private int attackDamage = 1;
     
-   
+     #region scripts references
+   private WeaponSystem weaponSystem;
+   private StaminaSystem staminaSystem;
+
+   #endregion
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -56,6 +60,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        weaponSystem = GetComponent<WeaponSystem>();
+        staminaSystem = GetComponent<StaminaSystem>();
         
 
         if (groundCheck == null)
@@ -75,12 +81,12 @@ public class PlayerController : MonoBehaviour
             attackPoint = attackPointObj.transform;
         }
     }
-    
+
     private void OnEnable()
     {
         inputActions.Enable();
-        
-        
+
+
         inputActions.Player.Move.performed += OnMovePerformed;
         inputActions.Player.Move.canceled += OnMoveCanceled;
         inputActions.Player.Jump.performed += OnJumpPerformed;
@@ -88,6 +94,10 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Sprint.performed += OnSprintPerformed;
         inputActions.Player.Sprint.canceled += OnSprintCanceled;
         inputActions.Player.Attack.performed += OnAttackPerformed;
+        
+        inputActions.Player.Weapon1.performed += OnWeapon1Performed;
+inputActions.Player.Weapon2.performed += OnWeapon2Performed;
+inputActions.Player.Weapon3.performed += OnWeapon3Performed;
     }
     
     private void OnDisable()
@@ -100,6 +110,10 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Sprint.performed -= OnSprintPerformed;
         inputActions.Player.Sprint.canceled -= OnSprintCanceled;
         inputActions.Player.Attack.performed -= OnAttackPerformed;
+
+        inputActions.Player.Weapon1.performed -= OnWeapon1Performed;
+inputActions.Player.Weapon2.performed -= OnWeapon2Performed;
+inputActions.Player.Weapon3.performed -= OnWeapon3Performed;
         
         inputActions.Disable();
     }
@@ -118,9 +132,32 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleJump();
     }
-    
+
     #region Input stuff
     
+    private void OnWeapon1Performed(InputAction.CallbackContext context)
+{
+    if (weaponSystem != null)
+    {
+        weaponSystem.SwitchToWeapon(0);
+    }
+}
+
+private void OnWeapon2Performed(InputAction.CallbackContext context)
+{
+    if (weaponSystem != null)
+    {
+        weaponSystem.SwitchToWeapon(1);
+    }
+}
+
+private void OnWeapon3Performed(InputAction.CallbackContext context)
+{
+    if (weaponSystem != null)
+    {
+        weaponSystem.SwitchToWeapon(2);
+    }
+}
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
@@ -186,8 +223,11 @@ public class PlayerController : MonoBehaviour
     private void Flip()
     {
         facingRight = !facingRight;
-        spriteRenderer.flipX = !facingRight;
-        
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;  
+        transform.localScale = scale;
+        // spriteRenderer.flipX = !facingRight;
+
 
         Vector3 attackPos = attackPoint.localPosition;
         attackPos.x *= -1;
@@ -251,54 +291,95 @@ public class PlayerController : MonoBehaviour
     
     #region Combat
     
-    private void HandleAttackCooldown()
+private void HandleAttackCooldown()
+{
+    if (!canAttack && Time.time >= lastAttackTime + attackCooldown)
     {
-        if (!canAttack && Time.time >= lastAttackTime + attackCooldown)
+        // Only allow attacking again if we have stamina
+        if (staminaSystem == null || staminaSystem.CanAttack())
         {
             canAttack = true;
         }
     }
+}
     
-    private void PerformAttack()
+private void PerformAttack()
+{
+    // checl  we have enough stamina to attack
+    if (staminaSystem != null && !staminaSystem.CanAttack())
     {
-        canAttack = false;
-        lastAttackTime = Time.time;
+        Debug.Log("no enough stamina to attack!");
+        return;
+    }
+    
+    //  stamina for attack
+    if (staminaSystem != null && !staminaSystem.TryUseAttackStamina())
+    {
+        return;
+    }
+    
+    canAttack = false;
+    lastAttackTime = Time.time;
+    
+    //  current weapon stats
+    Weapon currentWeapon = weaponSystem?.GetCurrentWeapon();
+    int weaponDamage = currentWeapon?.damage ?? attackDamage;
+    float weaponRange = currentWeapon?.range ?? attackRange;
+    
+    //  attack animation
+    if (animator != null)
+    {
+        animator.SetTrigger("Attack");
+    }
+    
+   
+    Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, weaponRange, enemyLayerMask);
+    
+    foreach (Collider2D enemy in hitEnemies)
+    {
         
-        //  attack animation
-        if (animator != null)
+        Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
+        
+       
+        var enemyHealth = enemy.GetComponent<EnemyHealth>();
+        if (enemyHealth != null)
         {
-            animator.SetTrigger("Attack");
-        }
-        
-        
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayerMask);
-        
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            //  attack direction for knockback
-            Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
-            
-            //  damage to enemies
-            var enemyHealth = enemy.GetComponent<EnemyHealth>();
-            if (enemyHealth != null)
+            bool damageDealt = enemyHealth.TakeDamage(weaponDamage, attackDirection);
+            if (damageDealt)
             {
-                bool damageDealt = enemyHealth.TakeDamage(attackDamage, attackDirection);
-                if (damageDealt)
-                {
                 
-                }
             }
         }
     }
+}
+    
     
     #endregion
-    
-    #region Animation
-    
-    private void UpdateAnimations() 
-    {
 
+    #region Animation
+
+ private void UpdateAnimations()
+{
+    if (animator == null) return;
+    
+  
+    bool actuallySprintingBasedOnStamina = sprintInput && 
+                                          Mathf.Abs(moveInput.x) > 0 && 
+                                          (staminaSystem == null || staminaSystem.CanSprint());
+    
+    
+    animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
+    animator.SetBool("IsGrounded", isGrounded);
+    animator.SetFloat("VelocityY", rb.velocity.y);
+    animator.SetBool("IsSprinting", actuallySprintingBasedOnStamina);
+    
+    
+    if (staminaSystem != null)
+    {
+        animator.SetFloat("StaminaPercentage", staminaSystem.GetStaminaPercentage());
+        animator.SetBool("HasStamina", staminaSystem.CanUseStamina());
     }
+}
     
     #endregion
     
