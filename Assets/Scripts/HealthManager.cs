@@ -9,25 +9,14 @@ public class HealthManager : MonoBehaviour
     public float currentHealth;
     public Image healthBar;
     public GameObject healthBarBase;
-    public Image healthBarUpgradeOne;
-    public GameObject healthBarLevelOne;
-    public Image healthBarUpgradeTwo;
-    public GameObject healthBarLevelTwo;
-    public Image healthBarUpgradeThree;
-    public GameObject healthBarLevelThree;
-    public Image healthBarUpgradeFour;
-    public GameObject healthBarLevelFour;
-    public Image healthBarUpgradeFive;
-    public GameObject healthBarLevelFive;
+    
     public GameObject gameOverScreen;
     public GameObject player;
     public CharacterController characterController;
     public GameObject playerWaitingPoint;
     public PlayerController playerScript;
 
-    [SerializeField] private float blinkDuration;
-    private Color defaultColor;
-
+    
     public void Start()
     {
         currentHealth = maxHealth;
@@ -54,13 +43,10 @@ public class HealthManager : MonoBehaviour
     {
         float targetFillAmount = currentHealth / maxHealth;
         healthBar.fillAmount = targetFillAmount;
-        healthBarUpgradeOne.fillAmount = targetFillAmount;
-        healthBarUpgradeTwo.fillAmount = targetFillAmount;
-        healthBarUpgradeThree.fillAmount = targetFillAmount;
-        healthBarUpgradeFour.fillAmount = targetFillAmount;
-        healthBarUpgradeFive.fillAmount = targetFillAmount;
+        
     }
 
+[ContextMenu("player hit")]
     public void PlayerHit()
     {
         currentHealth = currentHealth - 10f;
@@ -91,51 +77,7 @@ public class HealthManager : MonoBehaviour
         updateHealthBar();
     }
 
-    public void GotUpgradeOne()
-    {
-        maxHealth = 120f;
-        currentHealth = maxHealth;
-        healthBarBase.SetActive(false);
-        healthBarLevelOne.SetActive(true);
-        updateHealthBar();
-    }
-
-    public void GotUpgradeTwo()
-    {
-        maxHealth = 140f;
-        currentHealth = maxHealth;
-        healthBarLevelOne.SetActive(false);
-        healthBarLevelTwo.SetActive(true);
-        updateHealthBar();
-    }
-
-    public void GotUpgradeThree()
-    {
-        maxHealth = 160f;
-        currentHealth = maxHealth;
-        healthBarLevelTwo.SetActive(false);
-        healthBarLevelThree.SetActive(true);
-        updateHealthBar();
-    }
-
-    public void GotUpgradeFour()
-    {
-        maxHealth = 180f;
-        currentHealth = maxHealth;
-        healthBarLevelThree.SetActive(false);
-        healthBarLevelFour.SetActive(true);
-        updateHealthBar();
-    }
-
-    public void GotUpgradeFive()
-    {
-        maxHealth = 200f;
-        currentHealth = maxHealth;
-        healthBarLevelFour.SetActive(false);
-        healthBarLevelFive.SetActive(true);
-        updateHealthBar();
-    }
-
+   
     public IEnumerator PlayerDied()
     {
         yield return new WaitForSeconds(0f);
