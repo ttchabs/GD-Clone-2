@@ -243,18 +243,51 @@ public class EnemyAI : MonoBehaviour
         }
     }
     
-    private void HandleAttacking()
+private void HandleAttacking()
+{
+    if (player == null) 
     {
-        FaceDirection(player.position.x - transform.position.x);
-        
-        attackCooldownTime -= Time.deltaTime;
-        if (attackCooldownTime <= 0f)
+        SetState(EnemyState.Chasing);
+        return;
+    }
+
+   
+    float directionToPlayer = player.position.x - transform.position.x;
+    FaceDirection(directionToPlayer);
+
+   
+    float distanceToPlayer = GetHorizontalDistanceToPlayer();
+    if (distanceToPlayer > attackTargetingRange)
+    {
+        SetState(EnemyState.Chasing);
+        return;
+    }
+
+  
+    attackCooldownTime -= Time.deltaTime;
+    if (attackCooldownTime > 0f) return;
+
+    
+    if (CompareTag("Shooter"))
+    {
+        if (attack != null && attack.CanFire())
         {
-            print("ATTACKING");
-            StartCoroutine(attack.Fire(player.position.x - transform.position.x));
-            attackCooldownTime = attackCooldown;
+            StartCoroutine(attack.Fire(directionToPlayer));
         }
     }
+    
+    else if (CompareTag("Melee"))
+    {
+        if (animator != null)
+        {
+            //animator.setTrigger("mellee")
+        }
+        
+    }
+
+    attackCooldownTime = attackCooldown; // reset cooldown
+}
+
     
     private void HandleMovement()
     {
