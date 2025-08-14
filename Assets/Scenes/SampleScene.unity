@@ -149,7 +149,7 @@ Transform:
   m_GameObject: {fileID: 5738268}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 27.9, y: -8.3, z: 1.0535713}
+  m_LocalPosition: {x: 22.4, y: -8.3, z: 1.0535713}
   m_LocalScale: {x: 3.2147279, y: 9.80492, z: 4.4649}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -789,7 +789,7 @@ Transform:
   m_GameObject: {fileID: 118063721}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -32.300003, y: -8.3, z: 1.0535713}
+  m_LocalPosition: {x: -37.8, y: -8.3, z: 1.0535713}
   m_LocalScale: {x: 3.2147279, y: 9.80492, z: 4.4649}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -873,7 +873,7 @@ Transform:
   m_GameObject: {fileID: 120424625}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 89.09999, y: -8.3, z: 1.0535713}
+  m_LocalPosition: {x: 82.7, y: -8.3, z: 1.0535713}
   m_LocalScale: {x: 3.2147279, y: 9.80492, z: 4.4649}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1112,7 +1112,7 @@ GameObject:
   - component: {fileID: 134841752}
   - component: {fileID: 134841751}
   m_Layer: 5
-  m_Name: healthStamina
+  m_Name: healthCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1199,6 +1199,7 @@ RectTransform:
   - {fileID: 1097465412}
   - {fileID: 1107263306}
   - {fileID: 1799392709}
+  - {fileID: 480386023}
   m_Father: {fileID: 1359295481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1899,18 +1900,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 480386021}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.2493153, y: 3.4932427, z: 1.5255}
+  m_LocalScale: {x: 2.3719676, y: 3.4932427, z: 1.5255}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 417065193}
   - {fileID: 1259207301}
-  m_Father: {fileID: 818177511}
+  m_Father: {fileID: 134841754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -678, y: 468}
+  m_AnchoredPosition: {x: -608.9, y: 468}
   m_SizeDelta: {x: 168.6913, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &481942750
@@ -2319,7 +2320,7 @@ Transform:
   m_GameObject: {fileID: 545599092}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 151.9, y: -8.3, z: 1.0535713}
+  m_LocalPosition: {x: 140.1, y: -8.3, z: 1.0535713}
   m_LocalScale: {x: 3.2147279, y: 9.80492, z: 4.4649}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3130,8 +3131,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 480386023}
+  m_Children: []
   m_Father: {fileID: 1359295481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4602,7 +4602,7 @@ Transform:
   m_GameObject: {fileID: 1139382573}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 213.09999, y: -8.3, z: 1.0535713}
+  m_LocalPosition: {x: 198.1, y: -8.3, z: 1.0535713}
   m_LocalScale: {x: 3.2147279, y: 9.80492, z: 4.4649}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -34714,7 +34714,7 @@ Transform:
   m_GameObject: {fileID: 1800727239}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -93.5, y: -8.3, z: 1.0535713}
+  m_LocalPosition: {x: -99, y: -8.3, z: 1.0535713}
   m_LocalScale: {x: 3.2147279, y: 9.80492, z: 4.4649}
   m_ConstrainProportionsScale: 0
   m_Children: []
