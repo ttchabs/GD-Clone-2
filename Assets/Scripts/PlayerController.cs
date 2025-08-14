@@ -11,6 +11,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 12f;
     [SerializeField] private float coyoteTime = 0.2f;
     [SerializeField] private float jumpBufferTime = 0.2f;
+
+    [Header("Wall Jump Settings")]
+    [SerializeField] private Transform wallCheckLeft;
+    [SerializeField] private Transform wallCheckRight;
+    [SerializeField] private float wallCheckDistance = 0.5f;
+    [SerializeField] private float wallJumpForce = 12f;
+    [SerializeField] private float wallJumpHorizontalForce = 8f;
+    [SerializeField] private float wallSlideSpeed = 2f;
+    [SerializeField] private bool enableWallSliding = true;
     
     [Header("Ground Detection")]
     [SerializeField] private Transform groundCheck;
@@ -56,6 +65,10 @@ public class PlayerController : MonoBehaviour
     private float lastAttackTime;
     private bool facingRight = true;
     
+    private bool isTouchingWallLeft;
+        private bool isTouchingWallRight;
+private bool isTouchingWall;
+private bool isWallSliding;
     // Combo system variables
     private ComboState currentCombo = ComboState.None;
     private int noOfClicks = 0;
@@ -73,19 +86,19 @@ public class PlayerController : MonoBehaviour
     
     // Input System
     private PlayerInputActions inputActions;
-    
+
     private void Awake()
     {
         // Initialize input actions
         inputActions = new PlayerInputActions();
-        
+
         // Get components
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         weaponSystem = GetComponent<WeaponSystem>();
         staminaSystem = GetComponent<StaminaSystem>();
-        
+
         // Setup audio source if not assigned
         if (audioSource == null)
         {
@@ -95,8 +108,8 @@ public class PlayerController : MonoBehaviour
                 audioSource = gameObject.AddComponent<AudioSource>();
             }
         }
-        
-        
+
+
         if (groundCheck == null)
         {
             GameObject groundCheckObj = new GameObject("GroundCheck");
@@ -104,8 +117,8 @@ public class PlayerController : MonoBehaviour
             groundCheckObj.transform.localPosition = new Vector3(0, -0.5f, 0);
             groundCheck = groundCheckObj.transform;
         }
-        
-        
+
+
         if (attackPoint == null)
         {
             GameObject attackPointObj = new GameObject("AttackPoint");
@@ -113,6 +126,22 @@ public class PlayerController : MonoBehaviour
             attackPointObj.transform.localPosition = new Vector3(1f, 0, 0);
             attackPoint = attackPointObj.transform;
         }
+        
+        if (wallCheckLeft == null)
+{
+    GameObject wallCheckLeftObj = new GameObject("WallCheckLeft");
+    wallCheckLeftObj.transform.SetParent(transform);
+    wallCheckLeftObj.transform.localPosition = new Vector3(-0.5f, 0, 0);
+    wallCheckLeft = wallCheckLeftObj.transform;
+}
+
+if (wallCheckRight == null) //wall jumpoe stuff
+{
+    GameObject wallCheckRightObj = new GameObject("WallCheckRight");
+    wallCheckRightObj.transform.SetParent(transform);
+    wallCheckRightObj.transform.localPosition = new Vector3(0.5f, 0, 0);
+    wallCheckRight = wallCheckRightObj.transform;
+}
     }
     
     private void OnEnable()
@@ -148,7 +177,7 @@ public class PlayerController : MonoBehaviour
         
         inputActions.Disable();
     }
-    
+
     private void Update()
     {
         CheckGrounded();
@@ -157,6 +186,9 @@ public class PlayerController : MonoBehaviour
         HandleAttackCooldown();
         HandleCombo();
         UpdateAnimations();
+        
+        CheckWallTouch();
+HandleWallSliding();
     }
     
     private void FixedUpdate()
@@ -326,32 +358,121 @@ public class PlayerController : MonoBehaviour
         }
     }
     
+    private void CheckWallTouch()
+{
+    //   walls on left and right
+    isTouchingWallLeft = Physics2D.Raycast(wallCheckLeft.position, Vector2.left, wallCheckDistance, groundLayerMask);
+    isTouchingWallRight = Physics2D.Raycast(wallCheckRight.position, Vector2.right, wallCheckDistance, groundLayerMask);
+    isTouchingWall = isTouchingWallLeft || isTouchingWallRight;
+}
+
+private void HandleWallSliding()
+{
+    //  wall slide if touching wall, not grounded, falling, and wall sliding is enabled
+    if (enableWallSliding && isTouchingWall && !isGrounded && rb.velocity.y < 0)
+    {
+        //  if moving toward the wall
+        bool movingTowardWall = (isTouchingWallLeft && moveInput.x < 0) || (isTouchingWallRight && moveInput.x > 0);
+        
+        if (movingTowardWall || moveInput.x == 0)
+        {
+            isWallSliding = true;
+            
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -wallSlideSpeed));
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+    }
+    else
+    {
+        isWallSliding = false;
+    }
+}
     private void HandleJump()
     {
-        
-        if (jumpBufferCounter > 0 && (isGrounded || coyoteTimeCounter > 0))
+        if (jumpBufferCounter > 0)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-            jumpBufferCounter = 0;
-            coyoteTimeCounter = 0;
+           
+            if (isGrounded || coyoteTimeCounter > 0)
+            {
+                PerformRegularJump();
+            }
+            // wall jump
+            else if (isTouchingWall && !isGrounded)
+            {
+                PerformWallJump();
+            }
         }
-        
-    
-        if (!jumpInput && rb.velocity.y > 0)
+
+   
+        if (!jumpInput && rb.velocity.y > 0 && !isWallSliding)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
     }
+
+private void PerformRegularJump()
+{
+    rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+    jumpBufferCounter = 0;
+    coyoteTimeCounter = 0;
+    isWallSliding = false;
     
+    Debug.Log("normal jump");
+}
+
+    private void PerformWallJump()
+    {
+        
+        float horizontalDirection = 0f;
+
+        if (isTouchingWallLeft)
+        {
+            horizontalDirection = 1f; //  jump away from left wall (to the right)
+        }
+        else if (isTouchingWallRight)
+        {
+            horizontalDirection = -1f; //  away from right wall 
+        }
+
+        //  wall jump forces
+        rb.velocity = new Vector2(horizontalDirection * wallJumpHorizontalForce, wallJumpForce);
+
+        //  timers and states
+        jumpBufferCounter = 0;
+        coyoteTimeCounter = 0;
+        isWallSliding = false;
+
+     
+        StartCoroutine(DisableMovementBriefly(0.1f));
+
+        Debug.Log("wall jumping yay");
+    }
+
+    private IEnumerator DisableMovementBriefly(float duration)
+    {
+        bool originalInput = sprintInput;
+        Vector2 originalMoveInput = moveInput;
+
+       
+        yield return new WaitForSeconds(duration);
+
+       
+    }
+
+
+
     #endregion
-    
+
     #region Combat & Combo System
-    
+
     private void HandleAttackCooldown()
     {
         if (!canAttack && Time.time >= lastAttackTime + attackCooldown)
         {
-        
+
             if (staminaSystem == null || staminaSystem.CanAttack())
             {
                 canAttack = true;
