@@ -149,12 +149,12 @@ MonoBehaviour:
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  attackCooldown: 0.5
+  attackCooldown: 0.1
   attackPoint: {fileID: 8977136459573314510}
   attackRange: 1
   enemyLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   attackDamage: 1
   comboWindow: 1
   comboDamageMultipliers:
