@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform pointB;
     [SerializeField] private float patrolSpeed = 2f;
     [SerializeField] private float waitTime = 1f;
+    [SerializeField] private float flipCooldown = 1f;
+    [SerializeField] private float patrolBuffer = 0.1f;
     
     [Header("Chase Settings")]
     [SerializeField] private float chaseRange = 8f;
@@ -24,8 +27,11 @@ public class EnemyAI : MonoBehaviour
     [Header("Edge Detection")]
     [SerializeField] private Transform edgeCheck;
     [SerializeField] private float edgeCheckDistance = 0.5f;
-    
 
+    [Header("Attack Parameters")] 
+    [SerializeField] private AttackScript attack;
+    [SerializeField] private float attackCooldown;
+    
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -37,6 +43,11 @@ public class EnemyAI : MonoBehaviour
     private bool facingRight = true;
     private float waitTimer;
     private Vector3 lastKnownPlayerPosition;
+    private float flipTime;
+    private float attackTargetingRange;
+    private float attackCooldownTime;
+    private Vector2 resultv2;
+    
     
  
     public enum EnemyState
@@ -44,7 +55,8 @@ public class EnemyAI : MonoBehaviour
         Patrolling,
         Waiting,
         Chasing,
-        Returning
+        Returning,
+        Attacking
     }
     
     private void Awake()
@@ -52,8 +64,8 @@ public class EnemyAI : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        attackTargetingRange = attack.targetingRange;
         
-  
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -109,7 +121,6 @@ public class EnemyAI : MonoBehaviour
         UpdateState();
         UpdateAnimations();
         
-  
         UpdateEdgeCheckPosition();
     }
     
@@ -127,29 +138,38 @@ public class EnemyAI : MonoBehaviour
             case EnemyState.Patrolling:
                 HandlePatrolling();
                 
-
-                if (player != null && distanceToPlayer <= chaseRange)
+                if (player != null && distanceToPlayer <= chaseRange && chaseRange > attackTargetingRange)
                 {
                     SetState(EnemyState.Chasing);
                     lastKnownPlayerPosition = player.position;
+                }
+                
+                if (player != null && distanceToPlayer < attackTargetingRange && chaseRange < attackTargetingRange)
+                {
+                    SetState(EnemyState.Attacking);
                 }
                 break;
                 
             case EnemyState.Waiting:
                 HandleWaiting();
                 
-
                 if (player != null && distanceToPlayer <= chaseRange)
                 {
                     SetState(EnemyState.Chasing);
                     lastKnownPlayerPosition = player.position;
                 }
+                if (player != null && distanceToPlayer < attackTargetingRange && chaseRange < attackTargetingRange)
+                {
+                    SetState(EnemyState.Attacking);
+                }
                 break;
                 
             case EnemyState.Chasing:
                 HandleChasing();
-                
-        
+                if (player != null && distanceToPlayer < attackTargetingRange)
+                {
+                    SetState(EnemyState.Attacking);
+                }
                 if (player == null || distanceToPlayer > losePlayerRange)
                 {
                     SetState(EnemyState.Returning);
@@ -158,6 +178,10 @@ public class EnemyAI : MonoBehaviour
                 
             case EnemyState.Returning:
                 HandleReturning();
+                break;
+            
+            case EnemyState.Attacking:
+                HandleAttacking();
                 break;
         }
     }
@@ -178,9 +202,9 @@ public class EnemyAI : MonoBehaviour
         
         if (waitTimer <= 0)
         {
-
-            currentTarget = (currentTarget == pointA) ? pointB : pointA;
-            SetState(EnemyState.Patrolling);
+            print("WAITING, SWITCHING");
+                currentTarget = currentTarget == pointA ? pointB : pointA; 
+                SetState(EnemyState.Patrolling);
         }
     }
     
@@ -190,25 +214,80 @@ public class EnemyAI : MonoBehaviour
         {
             lastKnownPlayerPosition = player.position;
             
-          
             FaceTarget(player.position);
         }
     }
     
     private void HandleReturning()
     {
-     
         float distanceToA = Vector2.Distance(transform.position, pointA.position);
         float distanceToB = Vector2.Distance(transform.position, pointB.position);
-        
-        currentTarget = (distanceToA < distanceToB) ? pointA : pointB;
-        
-     
-        if (Vector2.Distance(transform.position, currentTarget.position) < 0.2f)
+        //if (this.transform.position.x < pointA.position.x || this.transform.position.x > pointB.position.x)
+        // {
+        //     currentTarget = (distanceToA > distanceToB) ? pointA : pointB;
+        // }
+        // else
+        // {
+            currentTarget = (distanceToA < distanceToB) ? pointA : pointB;
+        //}
+        print("RETURNING");
+
+        if (Vector2.Distance( transform.position,currentTarget.position) >= patrolBuffer)
         {
-            SetState(EnemyState.Patrolling);
+            SetState(EnemyState.Waiting);
+        }
+        
+        if (Vector2.Distance(transform.position, currentTarget.position) >= patrolBuffer)
+        {
+            SetState(EnemyState.Waiting);
         }
     }
+    
+private void HandleAttacking()
+{
+    if (player == null) 
+    {
+        SetState(EnemyState.Chasing);
+        return;
+    }
+
+   
+    float directionToPlayer = player.position.x - transform.position.x;
+    FaceDirection(directionToPlayer);
+
+   
+    float distanceToPlayer = GetHorizontalDistanceToPlayer();
+    if (distanceToPlayer > attackTargetingRange)
+    {
+        SetState(EnemyState.Chasing);
+        return;
+    }
+
+  
+    attackCooldownTime -= Time.deltaTime;
+    if (attackCooldownTime > 0f) return;
+
+    
+    if (CompareTag("Shooter"))
+    {
+        if (attack != null && attack.CanFire())
+        {
+            StartCoroutine(attack.Fire(directionToPlayer));
+        }
+    }
+    
+    else if (CompareTag("Melee"))
+    {
+        if (animator != null)
+        {
+            //animator.setTrigger("mellee")
+        }
+        
+    }
+
+    attackCooldownTime = attackCooldown; // reset cooldown
+}
+
     
     private void HandleMovement()
     {
@@ -236,14 +315,16 @@ public class EnemyAI : MonoBehaviour
                 break;
                 
             case EnemyState.Waiting:
-                
                 rb.velocity = new Vector2(0, rb.velocity.y);
+                break;
+            
+            case EnemyState.Attacking:
+                rb.velocity = new Vector2(0, rb.velocity.y);
+                SetState(EnemyState.Chasing);
                 return;
         }
         
-       
         float direction = Mathf.Sign(targetPosition.x - transform.position.x);
-        
         
         if (CanMove(direction))
         {
@@ -252,10 +333,8 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-           
             rb.velocity = new Vector2(0, rb.velocity.y);
             
-         
             if (currentState == EnemyState.Patrolling)
             {
                 SetState(EnemyState.Waiting);
@@ -266,10 +345,22 @@ public class EnemyAI : MonoBehaviour
     
     private bool CanMove(float direction)
     {
-      
+        bool patrolCheck = true;
         RaycastHit2D groundHit = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayerMask);
         
-      
+        //patrol check
+        if (currentState == EnemyState.Patrolling)
+        {
+            if (GetHorizontalDistanceToTarget() > patrolBuffer)
+            {
+                patrolCheck = true;
+            }
+            else
+            {
+                patrolCheck = false;
+            }
+        }
+        
         Vector3 edgeCheckPos = edgeCheck.position;
         if (direction > 0) 
         {
@@ -282,7 +373,7 @@ public class EnemyAI : MonoBehaviour
         
         RaycastHit2D edgeHit = Physics2D.Raycast(edgeCheckPos, Vector2.down, groundCheckDistance, groundLayerMask);
         
-        return groundHit.collider != null && edgeHit.collider != null;
+        return groundHit.collider != null && edgeHit.collider != null && patrolCheck;
     }
     
     private void FaceTarget(Vector3 targetPosition)
@@ -293,15 +384,20 @@ public class EnemyAI : MonoBehaviour
     
     private void FaceDirection(float direction)
     {
-        if (direction > 0 && !facingRight)
+        flipTime = flipCooldown;
+        flipTime -= Time.deltaTime;
+        if (direction > 0 && !facingRight )//&& flipTime == 0
         {
             Flip();
+            //flipTime = flipCooldown;
         }
-        else if (direction < 0 && facingRight)
+        else if (direction < 0 && facingRight )//&& flipTime == 0
         {
             Flip();
+            //flipTime = flipCooldown;
         }
     }
+    
     
     private void Flip()
     {
@@ -322,6 +418,16 @@ public class EnemyAI : MonoBehaviour
         return Mathf.Abs(player.position.x - transform.position.x);
     }
     
+    private float GetHorizontalDistanceToTarget()
+    {
+        if (currentTarget == null) {return float.MaxValue;}
+        else
+        {
+            return Math.Abs(currentTarget.position.x - transform.position.x);
+        }
+        
+    }
+    
     private void SetState(EnemyState newState)
     {
         currentState = newState;
@@ -333,7 +439,6 @@ public class EnemyAI : MonoBehaviour
     {
         if (animator == null) return;
         
-       
         animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         animator.SetBool("IsChasing", currentState == EnemyState.Chasing);
         animator.SetInteger("State", (int)currentState);

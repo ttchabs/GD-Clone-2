@@ -24,22 +24,30 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask enemyLayerMask;
     [SerializeField] private int attackDamage = 1;
     
-     #region scripts references
-   private WeaponSystem weaponSystem;
-   private StaminaSystem staminaSystem;
-
-   #endregion
+    [Header("Combo Settings")]
+    [SerializeField] private float comboWindow = 1.0f; // Time window to continue combo
+    [SerializeField] private float[] comboDamageMultipliers = {1f, 1.2f, 1.5f}; // Damage for each combo step
+    [SerializeField] private float[] comboRangeMultipliers = {1f, 1.1f, 1.3f}; // Range for each combo step
+    
+    [Header("Audio & Effects")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip slashSound;
+    [SerializeField] private ParticleSystem slashTrail;
+    
+    // Components
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private WeaponSystem weaponSystem;
+    private StaminaSystem staminaSystem;
     
-    // player variables
+    // Input variables
     private Vector2 moveInput;
     private bool jumpInput;
     private bool sprintInput;
     private bool attackInput;
     
-   
+    // State variables
     private bool isGrounded;
     private bool wasGrounded;
     private float coyoteTimeCounter;
@@ -48,22 +56,47 @@ public class PlayerController : MonoBehaviour
     private float lastAttackTime;
     private bool facingRight = true;
     
-   
+    // Combo system variables
+    private ComboState currentCombo = ComboState.None;
+    private int noOfClicks = 0;
+    private float lastClickedTime = 0f;
+    private bool isAttacking = false;
+    
+    // Combo states enum
+    public enum ComboState
+    {
+        None = 0,
+        Attack1 = 1,
+        Attack2 = 2,
+        Attack3 = 3
+    }
+    
+    // Input System
     private PlayerInputActions inputActions;
     
     private void Awake()
     {
-    
+        // Initialize input actions
         inputActions = new PlayerInputActions();
         
-   
+        // Get components
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         weaponSystem = GetComponent<WeaponSystem>();
         staminaSystem = GetComponent<StaminaSystem>();
         
-
+        // Setup audio source if not assigned
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+        
+        
         if (groundCheck == null)
         {
             GameObject groundCheckObj = new GameObject("GroundCheck");
@@ -72,7 +105,7 @@ public class PlayerController : MonoBehaviour
             groundCheck = groundCheckObj.transform;
         }
         
-        // Create attack point if it doesn't exist
+        
         if (attackPoint == null)
         {
             GameObject attackPointObj = new GameObject("AttackPoint");
@@ -81,12 +114,12 @@ public class PlayerController : MonoBehaviour
             attackPoint = attackPointObj.transform;
         }
     }
-
+    
     private void OnEnable()
     {
         inputActions.Enable();
-
-
+        
+        
         inputActions.Player.Move.performed += OnMovePerformed;
         inputActions.Player.Move.canceled += OnMoveCanceled;
         inputActions.Player.Jump.performed += OnJumpPerformed;
@@ -94,15 +127,14 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Sprint.performed += OnSprintPerformed;
         inputActions.Player.Sprint.canceled += OnSprintCanceled;
         inputActions.Player.Attack.performed += OnAttackPerformed;
-        
         inputActions.Player.Weapon1.performed += OnWeapon1Performed;
-inputActions.Player.Weapon2.performed += OnWeapon2Performed;
-inputActions.Player.Weapon3.performed += OnWeapon3Performed;
+        inputActions.Player.Weapon2.performed += OnWeapon2Performed;
+        inputActions.Player.Weapon3.performed += OnWeapon3Performed;
     }
     
     private void OnDisable()
     {
-       
+      
         inputActions.Player.Move.performed -= OnMovePerformed;
         inputActions.Player.Move.canceled -= OnMoveCanceled;
         inputActions.Player.Jump.performed -= OnJumpPerformed;
@@ -110,10 +142,9 @@ inputActions.Player.Weapon3.performed += OnWeapon3Performed;
         inputActions.Player.Sprint.performed -= OnSprintPerformed;
         inputActions.Player.Sprint.canceled -= OnSprintCanceled;
         inputActions.Player.Attack.performed -= OnAttackPerformed;
-
         inputActions.Player.Weapon1.performed -= OnWeapon1Performed;
-inputActions.Player.Weapon2.performed -= OnWeapon2Performed;
-inputActions.Player.Weapon3.performed -= OnWeapon3Performed;
+        inputActions.Player.Weapon2.performed -= OnWeapon2Performed;
+        inputActions.Player.Weapon3.performed -= OnWeapon3Performed;
         
         inputActions.Disable();
     }
@@ -124,6 +155,7 @@ inputActions.Player.Weapon3.performed -= OnWeapon3Performed;
         HandleCoyoteTime();
         HandleJumpBuffer();
         HandleAttackCooldown();
+        HandleCombo();
         UpdateAnimations();
     }
     
@@ -132,32 +164,9 @@ inputActions.Player.Weapon3.performed -= OnWeapon3Performed;
         HandleMovement();
         HandleJump();
     }
-
-    #region Input stuff
     
-    private void OnWeapon1Performed(InputAction.CallbackContext context)
-{
-    if (weaponSystem != null)
-    {
-        weaponSystem.SwitchToWeapon(0);
-    }
-}
-
-private void OnWeapon2Performed(InputAction.CallbackContext context)
-{
-    if (weaponSystem != null)
-    {
-        weaponSystem.SwitchToWeapon(1);
-    }
-}
-
-private void OnWeapon3Performed(InputAction.CallbackContext context)
-{
-    if (weaponSystem != null)
-    {
-        weaponSystem.SwitchToWeapon(2);
-    }
-}
+    #region Input Callbacks
+    
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
@@ -191,44 +200,91 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
     
     private void OnAttackPerformed(InputAction.CallbackContext context)
     {
-        if (canAttack)
+        if (CanAttack())
         {
-            PerformAttack();
+            Attack();
+        }
+    }
+    
+    private void OnWeapon1Performed(InputAction.CallbackContext context)
+    {
+        if (weaponSystem != null)
+        {
+            weaponSystem.SwitchToWeapon(0);
+        }
+    }
+    
+    private void OnWeapon2Performed(InputAction.CallbackContext context)
+    {
+        if (weaponSystem != null)
+        {
+            weaponSystem.SwitchToWeapon(1);
+        }
+    }
+    
+    private void OnWeapon3Performed(InputAction.CallbackContext context)
+    {
+        if (weaponSystem != null)
+        {
+            weaponSystem.SwitchToWeapon(2);
         }
     }
     
     #endregion
     
-    #region Movement stuff
+    #region Movement
     
     private void HandleMovement()
     {
-        float currentSpeed = sprintInput ? sprintSpeed : walkSpeed;
+        
+        bool canSprint = staminaSystem != null ? staminaSystem.CanSprint() : true;
+        bool shouldSprint = sprintInput && canSprint && Mathf.Abs(moveInput.x) > 0;
+        
+        float currentSpeed = shouldSprint ? sprintSpeed : walkSpeed;
         float targetVelocity = moveInput.x * currentSpeed;
         
-     
+       
+        if (isAttacking)
+        {
+            targetVelocity *= 0.3f; //  movement during attack is lesss
+        }
+        
+        
+        if (staminaSystem != null)
+        {
+            if (shouldSprint)
+            {
+                staminaSystem.StartSprinting();
+            }
+            else
+            {
+                staminaSystem.StopSprinting();
+            }
+        }
+        
+       
         rb.velocity = new Vector2(targetVelocity, rb.velocity.y);
         
-    
-        if (moveInput.x > 0 && !facingRight)
+        
+        if (!isAttacking)
         {
-            Flip();
-        }
-        else if (moveInput.x < 0 && facingRight)
-        {
-            Flip();
+            if (moveInput.x > 0 && !facingRight)
+            {
+                Flip();
+            }
+            else if (moveInput.x < 0 && facingRight)
+            {
+                Flip();
+            }
         }
     }
     
     private void Flip()
     {
         facingRight = !facingRight;
-        Vector3 scale = transform.localScale;
-        scale.x *= -1;  
-        transform.localScale = scale;
-        // spriteRenderer.flipX = !facingRight;
-
-
+        spriteRenderer.flipX = !facingRight;
+        
+     
         Vector3 attackPos = attackPoint.localPosition;
         attackPos.x *= -1;
         attackPoint.localPosition = attackPos;
@@ -236,14 +292,14 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
     
     #endregion
     
-    #region Jumping stuff
+    #region Jumping
     
     private void CheckGrounded()
     {
         wasGrounded = isGrounded;
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerMask);
         
-
+        
         if (!wasGrounded && isGrounded)
         {
             coyoteTimeCounter = coyoteTime;
@@ -272,7 +328,7 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
     
     private void HandleJump()
     {
-        // so u dont jump a lot
+        
         if (jumpBufferCounter > 0 && (isGrounded || coyoteTimeCounter > 0))
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -280,7 +336,7 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
             coyoteTimeCounter = 0;
         }
         
-        
+    
         if (!jumpInput && rb.velocity.y > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
@@ -289,116 +345,254 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
     
     #endregion
     
-    #region Combat
+    #region Combat & Combo System
     
-private void HandleAttackCooldown()
-{
-    if (!canAttack && Time.time >= lastAttackTime + attackCooldown)
+    private void HandleAttackCooldown()
     {
-        // Only allow attacking again if we have stamina
-        if (staminaSystem == null || staminaSystem.CanAttack())
+        if (!canAttack && Time.time >= lastAttackTime + attackCooldown)
         {
-            canAttack = true;
-        }
-    }
-}
-    
-private void PerformAttack()
-{
-    // checl  we have enough stamina to attack
-    if (staminaSystem != null && !staminaSystem.CanAttack())
-    {
-        Debug.Log("no enough stamina to attack!");
-        return;
-    }
-    
-    //  stamina for attack
-    if (staminaSystem != null && !staminaSystem.TryUseAttackStamina())
-    {
-        return;
-    }
-    
-    canAttack = false;
-    lastAttackTime = Time.time;
-    
-    //  current weapon stats
-    Weapon currentWeapon = weaponSystem?.GetCurrentWeapon();
-    int weaponDamage = currentWeapon?.damage ?? attackDamage;
-    float weaponRange = currentWeapon?.range ?? attackRange;
-    
-    //  attack animation
-    if (animator != null)
-    {
-        animator.SetTrigger("Attack");
-    }
-    
-   
-    Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, weaponRange, enemyLayerMask);
-    
-    foreach (Collider2D enemy in hitEnemies)
-    {
         
-        Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
-        
-       
-        var enemyHealth = enemy.GetComponent<EnemyHealth>();
-        if (enemyHealth != null)
-        {
-            bool damageDealt = enemyHealth.TakeDamage(weaponDamage, attackDirection);
-            if (damageDealt)
+            if (staminaSystem == null || staminaSystem.CanAttack())
             {
-                
+                canAttack = true;
             }
         }
     }
-}
     
-    
-    #endregion
-
-    #region Animation
-
- private void UpdateAnimations()
-{
-    if (animator == null) return;
-    
-  
-    bool actuallySprintingBasedOnStamina = sprintInput && 
-                                          Mathf.Abs(moveInput.x) > 0 && 
-                                          (staminaSystem == null || staminaSystem.CanSprint());
-    
-    
-    animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
-    animator.SetBool("IsGrounded", isGrounded);
-    animator.SetFloat("VelocityY", rb.velocity.y);
-    animator.SetBool("IsSprinting", actuallySprintingBasedOnStamina);
-    
-    
-    if (staminaSystem != null)
+    private bool CanAttack()
     {
-        animator.SetFloat("StaminaPercentage", staminaSystem.GetStaminaPercentage());
-        animator.SetBool("HasStamina", staminaSystem.CanUseStamina());
+        // check bsic attack conditions
+        if (!canAttack) return false;
+        
+        // check stamina
+        if (staminaSystem != null && !staminaSystem.CanAttack())
+        {
+            return false;
+        }
+        
+        return true;
     }
-}
+    
+    public void Attack()
+    {
+        // Check if we have enough stamina to attack
+        if (staminaSystem != null && !staminaSystem.CanAttack())
+        {
+            Debug.Log("bitch u dont have stamina to attack");
+            return;
+        }
+        
+       
+        if (staminaSystem != null && !staminaSystem.TryUseAttackStamina())
+        {
+          
+            return;
+        }
+        
+        lastClickedTime = Time.time;
+        noOfClicks = Mathf.Clamp(noOfClicks + 1, 0, 3);
+        
+       
+        if (audioSource != null && slashSound != null)
+        {
+            audioSource.PlayOneShot(slashSound);
+        }
+        
+        if (slashTrail != null)
+        {
+            slashTrail.Play();
+        }
+        
+        
+        switch (noOfClicks)
+        {
+            case 1:
+                currentCombo = ComboState.Attack1;
+                break;
+            case 2:
+                currentCombo = ComboState.Attack2;
+                break;
+            case 3:
+                currentCombo = ComboState.Attack3;
+                break;
+        }
+        
+        
+        if (animator != null)
+        {
+            animator.SetInteger("ComboStep", (int)currentCombo);
+            animator.SetTrigger("Attack");
+        }
+        
+        isAttacking = true;
+        
+        //  attack collider coroutine
+        StartCoroutine(ColliderSwitch());
+        
+        Debug.Log($"doing attack {noOfClicks} ... combo: {currentCombo}");
+    }
+    
+    private void HandleCombo()
+    {
+        if (animator == null) return;
+        
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float currentAnimLength = stateInfo.length;
+        
+        // reset combo if combo window run out
+        if (Time.time - lastClickedTime > comboWindow)
+        {
+            if (!stateInfo.IsName("Attack3"))
+            {
+                ResetCombo();
+            }
+        }
+        
+        //  combo stuff
+        if (stateInfo.normalizedTime > 0.3f && !animator.IsInTransition(0))
+        {
+            if (stateInfo.IsName("Attack1") && noOfClicks >= 2)
+            {
+                animator.SetInteger("ComboStep", 2);
+                animator.SetTrigger("Attack");
+            }
+            else if (stateInfo.IsName("Attack2") && noOfClicks >= 3)
+            {
+                animator.SetInteger("ComboStep", 3);
+                animator.SetTrigger("Attack");
+            }
+            else if (stateInfo.IsName("Attack3"))
+            {
+                ResetCombo();
+            }
+            else if (noOfClicks == 1)
+            {
+                animator.SetInteger("ComboStep", 1);
+                animator.SetTrigger("Attack");
+            }
+        }
+        
+        
+        if (isAttacking && stateInfo.normalizedTime >= 0.95f && !animator.IsInTransition(0))
+        {
+            if (stateInfo.IsName("Attack1") || stateInfo.IsName("Attack2") || stateInfo.IsName("Attack3"))
+            {
+                if (noOfClicks == 0 || (int)currentCombo == noOfClicks)
+                {
+                    isAttacking = false;
+                }
+            }
+        }
+    }
+    
+    private void ResetCombo()
+    {
+        noOfClicks = 0;
+        currentCombo = ComboState.None;
+        isAttacking = false;
+        
+        if (animator != null)
+        {
+            animator.SetInteger("ComboStep", 0);
+        }
+    }
+    
+    private IEnumerator ColliderSwitch()
+    {
+    
+        yield return new WaitForSeconds(0.1f);
+        
+     
+        PerformAttackDamage();
+        
+      
+        canAttack = false;
+        lastAttackTime = Time.time;
+    }
+    
+    private void PerformAttackDamage()
+    {
+      
+        Weapon currentWeapon = weaponSystem?.GetCurrentWeapon();
+        int weaponDamage = currentWeapon?.damage ?? attackDamage;
+        float weaponRange = currentWeapon?.range ?? attackRange;
+        
+     
+        int comboIndex = Mathf.Clamp((int)currentCombo - 1, 0, comboDamageMultipliers.Length - 1);
+        float damageMultiplier = comboDamageMultipliers[comboIndex];
+        float rangeMultiplier = comboRangeMultipliers[comboIndex];
+        
+        int finalDamage = Mathf.RoundToInt(weaponDamage * damageMultiplier);
+        float finalRange = weaponRange * rangeMultiplier;
+        
+       
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, finalRange, enemyLayerMask);
+        
+        foreach (Collider2D enemy in hitEnemies)
+        {
+          
+            Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
+            
+          
+            var enemyHealth = enemy.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                bool damageDealt = enemyHealth.TakeDamage(finalDamage, attackDirection);
+                if (damageDealt)
+                {
+                    Debug.Log($"combo {currentCombo}: hit {enemy.name} for {finalDamage} damage!");
+                }
+            }
+        }
+    }
     
     #endregion
     
-    #region Gizmos 4 debug visually
+    #region Animation
+    
+    private void UpdateAnimations()
+    {
+        if (animator == null) return;
+        
+       
+        bool actuallySprintingBasedOnStamina = sprintInput &&  Mathf.Abs(moveInput.x) > 0 && (staminaSystem == null || staminaSystem.CanSprint());
+        
+        //  animation parameters
+        // animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
+        // animator.SetBool("IsGrounded", isGrounded);
+        // animator.SetFloat("VelocityY", rb.velocity.y);
+        // animator.SetBool("IsSprinting", actuallySprintingBasedOnStamina);
+        // animator.SetBool("IsAttacking", isAttacking);
+        
+
+    }
+    
+    #endregion
+    
+    #region Gizmos
     
     private void OnDrawGizmosSelected()
     {
-       
+        //  ground check
         if (groundCheck != null)
         {
             Gizmos.color = isGrounded ? Color.green : Color.red;
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
         
-      
+        //  attack range (with combo multiplier if attacking)
         if (attackPoint != null)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+            float displayRange = attackRange;
+            
+            if (isAttacking && currentCombo != ComboState.None)
+            {
+                int comboIndex = Mathf.Clamp((int)currentCombo - 1, 0, comboRangeMultipliers.Length - 1);
+                displayRange *= comboRangeMultipliers[comboIndex];
+            }
+            
+            Gizmos.color = isAttacking ? Color.yellow : Color.red;
+            Gizmos.DrawWireSphere(attackPoint.position, displayRange);
         }
     }
     
