@@ -31688,7 +31688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2150616314399573036, guid: a1e2e027fb4288e4ba4786d2f8ef001c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2150616314399573036, guid: a1e2e027fb4288e4ba4786d2f8ef001c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -31717,6 +31717,22 @@ PrefabInstance:
     - target: {fileID: 2150616314399573036, guid: a1e2e027fb4288e4ba4786d2f8ef001c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2788541164476624464, guid: a1e2e027fb4288e4ba4786d2f8ef001c, type: 3}
+      propertyPath: RotationModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2788541164476624464, guid: a1e2e027fb4288e4ba4786d2f8ef001c, type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2788541164476624464, guid: a1e2e027fb4288e4ba4786d2f8ef001c, type: 3}
+      propertyPath: RotationModule.separateAxes
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2788541164476624464, guid: a1e2e027fb4288e4ba4786d2f8ef001c, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
