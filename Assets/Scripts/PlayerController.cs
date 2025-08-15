@@ -66,9 +66,10 @@ public class PlayerController : MonoBehaviour
     private bool facingRight = true;
     
     private bool isTouchingWallLeft;
-        private bool isTouchingWallRight;
-private bool isTouchingWall;
-private bool isWallSliding;
+    private bool isTouchingWallRight;
+    private bool isTouchingWall;
+    private bool isWallSliding;
+    
     // Combo system variables
     private ComboState currentCombo = ComboState.None;
     private int noOfClicks = 0;
@@ -109,7 +110,6 @@ private bool isWallSliding;
             }
         }
 
-
         if (groundCheck == null)
         {
             GameObject groundCheckObj = new GameObject("GroundCheck");
@@ -117,7 +117,6 @@ private bool isWallSliding;
             groundCheckObj.transform.localPosition = new Vector3(0, -0.5f, 0);
             groundCheck = groundCheckObj.transform;
         }
-
 
         if (attackPoint == null)
         {
@@ -128,26 +127,25 @@ private bool isWallSliding;
         }
         
         if (wallCheckLeft == null)
-{
-    GameObject wallCheckLeftObj = new GameObject("WallCheckLeft");
-    wallCheckLeftObj.transform.SetParent(transform);
-    wallCheckLeftObj.transform.localPosition = new Vector3(-0.5f, 0, 0);
-    wallCheckLeft = wallCheckLeftObj.transform;
-}
+        {
+            GameObject wallCheckLeftObj = new GameObject("WallCheckLeft");
+            wallCheckLeftObj.transform.SetParent(transform);
+            wallCheckLeftObj.transform.localPosition = new Vector3(-0.5f, 0, 0);
+            wallCheckLeft = wallCheckLeftObj.transform;
+        }
 
-if (wallCheckRight == null) //wall jumpoe stuff
-{
-    GameObject wallCheckRightObj = new GameObject("WallCheckRight");
-    wallCheckRightObj.transform.SetParent(transform);
-    wallCheckRightObj.transform.localPosition = new Vector3(0.5f, 0, 0);
-    wallCheckRight = wallCheckRightObj.transform;
-}
+        if (wallCheckRight == null)
+        {
+            GameObject wallCheckRightObj = new GameObject("WallCheckRight");
+            wallCheckRightObj.transform.SetParent(transform);
+            wallCheckRightObj.transform.localPosition = new Vector3(0.5f, 0, 0);
+            wallCheckRight = wallCheckRightObj.transform;
+        }
     }
     
     private void OnEnable()
     {
         inputActions.Enable();
-        
         
         inputActions.Player.Move.performed += OnMovePerformed;
         inputActions.Player.Move.canceled += OnMoveCanceled;
@@ -163,7 +161,6 @@ if (wallCheckRight == null) //wall jumpoe stuff
     
     private void OnDisable()
     {
-      
         inputActions.Player.Move.performed -= OnMovePerformed;
         inputActions.Player.Move.canceled -= OnMoveCanceled;
         inputActions.Player.Jump.performed -= OnJumpPerformed;
@@ -188,7 +185,7 @@ if (wallCheckRight == null) //wall jumpoe stuff
         UpdateAnimations();
         
         CheckWallTouch();
-HandleWallSliding();
+        HandleWallSliding();
     }
     
     private void FixedUpdate()
@@ -238,54 +235,50 @@ HandleWallSliding();
         }
     }
     
-        #endregion
+    #endregion
     
-#region Weapon Switching 
+    #region Weapon Switching 
 
-private void OnWeapon1Performed(InputAction.CallbackContext context)
-{
-    if (weaponSystem != null)
+    private void OnWeapon1Performed(InputAction.CallbackContext context)
     {
-        weaponSystem.SwitchToWeapon(0);
+        if (weaponSystem != null)
+        {
+            weaponSystem.SwitchToWeapon(0);
+        }
     }
-}
 
-private void OnWeapon2Performed(InputAction.CallbackContext context)
-{
-    if (weaponSystem != null)
+    private void OnWeapon2Performed(InputAction.CallbackContext context)
     {
-        weaponSystem.SwitchToWeapon(1);
+        if (weaponSystem != null)
+        {
+            weaponSystem.SwitchToWeapon(1);
+        }
     }
-}
 
-private void OnWeapon3Performed(InputAction.CallbackContext context)
-{
-    if (weaponSystem != null)
+    private void OnWeapon3Performed(InputAction.CallbackContext context)
     {
-        weaponSystem.SwitchToWeapon(2);
+        if (weaponSystem != null)
+        {
+            weaponSystem.SwitchToWeapon(2);
+        }
     }
-}
 
-#endregion
-
+    #endregion
     
     #region Movement
     
     private void HandleMovement()
     {
-        
         bool canSprint = staminaSystem != null ? staminaSystem.CanSprint() : true;
         bool shouldSprint = sprintInput && canSprint && Mathf.Abs(moveInput.x) > 0;
         
         float currentSpeed = shouldSprint ? sprintSpeed : walkSpeed;
         float targetVelocity = moveInput.x * currentSpeed;
         
-       
         if (isAttacking)
         {
-            targetVelocity *= 0.3f; //  movement during attack is lesss
+            targetVelocity *= 0.3f; // Reduce movement during attack
         }
-        
         
         if (staminaSystem != null)
         {
@@ -299,9 +292,7 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
             }
         }
         
-       
         rb.velocity = new Vector2(targetVelocity, rb.velocity.y);
-        
         
         if (!isAttacking)
         {
@@ -321,10 +312,15 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
         facingRight = !facingRight;
         spriteRenderer.flipX = !facingRight;
         
-     
         Vector3 attackPos = attackPoint.localPosition;
         attackPos.x *= -1;
         attackPoint.localPosition = attackPos;
+        
+        // Flip weapons when player changes direction
+        if (weaponSystem != null)
+        {
+            weaponSystem.FlipWeapons(facingRight);
+        }
     }
     
     #endregion
@@ -335,7 +331,6 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
     {
         wasGrounded = isGrounded;
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayerMask);
-        
         
         if (!wasGrounded && isGrounded)
         {
@@ -364,93 +359,83 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
     }
     
     private void CheckWallTouch()
-{
-    //   walls on left and right
-    isTouchingWallLeft = Physics2D.Raycast(wallCheckLeft.position, Vector2.left, wallCheckDistance, groundLayerMask);
-    isTouchingWallRight = Physics2D.Raycast(wallCheckRight.position, Vector2.right, wallCheckDistance, groundLayerMask);
-    isTouchingWall = isTouchingWallLeft || isTouchingWallRight;
-}
-
-private void HandleWallSliding()
-{
-    //  wall slide if touching wall, not grounded, falling, and wall sliding is enabled
-    if (enableWallSliding && isTouchingWall && !isGrounded && rb.velocity.y < 0)
     {
-        //  if moving toward the wall
-        bool movingTowardWall = (isTouchingWallLeft && moveInput.x < 0) || (isTouchingWallRight && moveInput.x > 0);
-        
-        if (movingTowardWall || moveInput.x == 0)
+        isTouchingWallLeft = Physics2D.Raycast(wallCheckLeft.position, Vector2.left, wallCheckDistance, groundLayerMask);
+        isTouchingWallRight = Physics2D.Raycast(wallCheckRight.position, Vector2.right, wallCheckDistance, groundLayerMask);
+        isTouchingWall = isTouchingWallLeft || isTouchingWallRight;
+    }
+
+    private void HandleWallSliding()
+    {
+        if (enableWallSliding && isTouchingWall && !isGrounded && rb.velocity.y < 0)
         {
-            isWallSliding = true;
+            bool movingTowardWall = (isTouchingWallLeft && moveInput.x < 0) || (isTouchingWallRight && moveInput.x > 0);
             
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -wallSlideSpeed));
+            if (movingTowardWall || moveInput.x == 0)
+            {
+                isWallSliding = true;
+                rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -wallSlideSpeed));
+            }
+            else
+            {
+                isWallSliding = false;
+            }
         }
         else
         {
             isWallSliding = false;
         }
     }
-    else
-    {
-        isWallSliding = false;
-    }
-}
+    
     private void HandleJump()
     {
         if (jumpBufferCounter > 0)
         {
-           
             if (isGrounded || coyoteTimeCounter > 0)
             {
                 PerformRegularJump();
             }
-            // wall jump
             else if (isTouchingWall && !isGrounded)
             {
                 PerformWallJump();
             }
         }
 
-   
         if (!jumpInput && rb.velocity.y > 0 && !isWallSliding)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
         }
     }
 
-private void PerformRegularJump()
-{
-    rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-    jumpBufferCounter = 0;
-    coyoteTimeCounter = 0;
-    isWallSliding = false;
-    
-    Debug.Log("normal jump");
-}
+    private void PerformRegularJump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        jumpBufferCounter = 0;
+        coyoteTimeCounter = 0;
+        isWallSliding = false;
+        
+        Debug.Log("normal jump");
+    }
 
     private void PerformWallJump()
     {
-        
         float horizontalDirection = 0f;
 
         if (isTouchingWallLeft)
         {
-            horizontalDirection = 1f; //  jump away from left wall (to the right)
+            horizontalDirection = 1f;
         }
         else if (isTouchingWallRight)
         {
-            horizontalDirection = -1f; //  away from right wall 
+            horizontalDirection = -1f;
         }
 
-        //  wall jump forces
         rb.velocity = new Vector2(horizontalDirection * wallJumpHorizontalForce, wallJumpForce);
 
-        //  timers and states
         jumpBufferCounter = 0;
         coyoteTimeCounter = 0;
         isWallSliding = false;
 
-     
         StartCoroutine(DisableMovementBriefly(0.1f));
 
         Debug.Log("wall jumping yay");
@@ -461,13 +446,8 @@ private void PerformRegularJump()
         bool originalInput = sprintInput;
         Vector2 originalMoveInput = moveInput;
 
-       
         yield return new WaitForSeconds(duration);
-
-       
     }
-
-
 
     #endregion
 
@@ -477,7 +457,6 @@ private void PerformRegularJump()
     {
         if (!canAttack && Time.time >= lastAttackTime + attackCooldown)
         {
-
             if (staminaSystem == null || staminaSystem.CanAttack())
             {
                 canAttack = true;
@@ -487,10 +466,8 @@ private void PerformRegularJump()
     
     private bool CanAttack()
     {
-        // check bsic attack conditions
         if (!canAttack) return false;
         
-        // check stamina
         if (staminaSystem != null && !staminaSystem.CanAttack())
         {
             return false;
@@ -501,34 +478,50 @@ private void PerformRegularJump()
     
     public void Attack()
     {
-        // Check if we have enough stamina to attack
+       
         if (staminaSystem != null && !staminaSystem.CanAttack())
         {
-            Debug.Log("bitch u dont have stamina to attack");
+            // Debug.Log("Not enough stamina to attack");
             return;
         }
         
-       
         if (staminaSystem != null && !staminaSystem.TryUseAttackStamina())
         {
-          
             return;
         }
         
         lastClickedTime = Time.time;
         noOfClicks = Mathf.Clamp(noOfClicks + 1, 0, 3);
         
-       
+        // Trigger weapon-specific attack animation
+        if (weaponSystem != null)
+        {
+            weaponSystem.TriggerWeaponAttack();
+        }
+        
+        // Play general attack sounds
         if (audioSource != null && slashSound != null)
         {
             audioSource.PlayOneShot(slashSound);
         }
         
-        if (slashTrail != null)
+        // Instantiate slash particle system at attack point
+        if (slashTrail != null && attackPoint != null)
         {
-            slashTrail.Play();
+            // Instantiate the particle system at the attack point
+            GameObject slashInstance = Instantiate(slashTrail.gameObject, attackPoint.position, attackPoint.rotation);
+            
+            // Get the particle system component and play it
+            ParticleSystem instantiatedParticles = slashInstance.GetComponent<ParticleSystem>();
+            if (instantiatedParticles != null)
+            {
+                instantiatedParticles.Play();
+                
+                // Destroy the instantiated particle system after it finishes playing
+                float particleDuration = instantiatedParticles.main.duration + instantiatedParticles.main.startLifetime.constantMax;
+                Destroy(slashInstance, particleDuration);
+            }
         }
-        
         
         switch (noOfClicks)
         {
@@ -543,7 +536,6 @@ private void PerformRegularJump()
                 break;
         }
         
-        
         if (animator != null)
         {
             animator.SetInteger("ComboStep", (int)currentCombo);
@@ -552,10 +544,41 @@ private void PerformRegularJump()
         
         isAttacking = true;
         
-        //  attack collider coroutine
-        StartCoroutine(ColliderSwitch());
+        // For melee weapons, use traditional collision detection
+        // For projectile weapons, the weapon handles its own damage
+        if (IsCurrentWeaponMelee())
+        {
+            StartCoroutine(ColliderSwitch());
+        }
+        else
+        {
+            //  projectile weapons, just handle cooldown
+            StartCoroutine(HandleProjectileAttackCooldown());
+        }
         
-        // Debug.Log($"doing attack {noOfClicks} ... combo: {currentCombo}");
+       
+    }
+    
+    private bool IsCurrentWeaponMelee()
+    {
+        if (weaponSystem == null) return true;
+        
+        GameObject currentWeaponObj = weaponSystem.GetCurrentWeaponGameObject();
+        if (currentWeaponObj == null) return true;
+        
+        WeaponBehavior weaponBehavior = currentWeaponObj.GetComponent<WeaponBehavior>();
+        if (weaponBehavior == null) return true;
+        
+        // Sword and Scythe use traditional melee collision, Axe handles its own projectile damage
+        WeaponBehavior.WeaponType weaponType = weaponBehavior.GetWeaponType();
+        return weaponType == WeaponBehavior.WeaponType.Sword || weaponType == WeaponBehavior.WeaponType.Scythe;
+    }
+    
+    private IEnumerator HandleProjectileAttackCooldown()
+    {
+        yield return new WaitForSeconds(0.1f);
+        canAttack = false;
+        lastAttackTime = Time.time;
     }
     
     private void HandleCombo()
@@ -565,7 +588,6 @@ private void PerformRegularJump()
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float currentAnimLength = stateInfo.length;
         
-        // reset combo if combo window run out
         if (Time.time - lastClickedTime > comboWindow)
         {
             if (!stateInfo.IsName("Attack3"))
@@ -574,7 +596,6 @@ private void PerformRegularJump()
             }
         }
         
-        //  combo stuff
         if (stateInfo.normalizedTime > 0.3f && !animator.IsInTransition(0))
         {
             if (stateInfo.IsName("Attack1") && noOfClicks >= 2)
@@ -597,7 +618,6 @@ private void PerformRegularJump()
                 animator.SetTrigger("Attack");
             }
         }
-        
         
         if (isAttacking && stateInfo.normalizedTime >= 0.95f && !animator.IsInTransition(0))
         {
@@ -625,25 +645,20 @@ private void PerformRegularJump()
     
     private IEnumerator ColliderSwitch()
     {
-    
         yield return new WaitForSeconds(0.1f);
         
-     
         PerformAttackDamage();
         
-      
         canAttack = false;
         lastAttackTime = Time.time;
     }
     
     private void PerformAttackDamage()
     {
-      
         Weapon currentWeapon = weaponSystem?.GetCurrentWeapon();
         int weaponDamage = currentWeapon?.damage ?? attackDamage;
         float weaponRange = currentWeapon?.range ?? attackRange;
         
-     
         int comboIndex = Mathf.Clamp((int)currentCombo - 1, 0, comboDamageMultipliers.Length - 1);
         float damageMultiplier = comboDamageMultipliers[comboIndex];
         float rangeMultiplier = comboRangeMultipliers[comboIndex];
@@ -651,22 +666,21 @@ private void PerformRegularJump()
         int finalDamage = Mathf.RoundToInt(weaponDamage * damageMultiplier);
         float finalRange = weaponRange * rangeMultiplier;
         
-       
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, finalRange, enemyLayerMask);
         
         foreach (Collider2D enemy in hitEnemies)
         {
-          
             Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
             
-          
             var enemyHealth = enemy.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
             {
                 bool damageDealt = enemyHealth.TakeDamage(finalDamage, attackDirection);
                 if (damageDealt)
                 {
-                    Debug.Log($"combo {currentCombo}: hit {enemy.name} for {finalDamage} damage!");
+                 
+
+
                 }
             }
         }
@@ -680,17 +694,14 @@ private void PerformRegularJump()
     {
         if (animator == null) return;
         
-       
-        bool actuallySprintingBasedOnStamina = sprintInput &&  Mathf.Abs(moveInput.x) > 0 && (staminaSystem == null || staminaSystem.CanSprint());
+        bool actuallySprintingBasedOnStamina = sprintInput && Mathf.Abs(moveInput.x) > 0 && (staminaSystem == null || staminaSystem.CanSprint());
         
-        //  animation parameters
+        // Animation parameters can be set here
         // animator.SetFloat("Speed", Mathf.Abs(moveInput.x));
         // animator.SetBool("IsGrounded", isGrounded);
         // animator.SetFloat("VelocityY", rb.velocity.y);
         // animator.SetBool("IsSprinting", actuallySprintingBasedOnStamina);
         // animator.SetBool("IsAttacking", isAttacking);
-        
-
     }
     
     #endregion
@@ -699,14 +710,12 @@ private void PerformRegularJump()
     
     private void OnDrawGizmosSelected()
     {
-        //  ground check
         if (groundCheck != null)
         {
             Gizmos.color = isGrounded ? Color.green : Color.red;
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
         
-        //  attack range (with combo multiplier if attacking)
         if (attackPoint != null)
         {
             float displayRange = attackRange;

@@ -134,7 +134,7 @@ public class WeaponBehavior : MonoBehaviour
             playerAnimator.SetTrigger("SwordAttack");
         }
         
-        Debug.Log("Sword attack triggered");
+        Debug.Log("sword a attack triggered");
     }
     
     private void TriggerAxeAttack()
@@ -148,7 +148,7 @@ public class WeaponBehavior : MonoBehaviour
             playerAnimator.SetTrigger("AxeThrow");
         }
         
-        Debug.Log("Axe throw triggered");
+        Debug.Log("axe throw ");
     }
     
     private void TriggerScytheAttack()
@@ -171,7 +171,7 @@ public class WeaponBehavior : MonoBehaviour
             playerAnimator.SetTrigger("ScytheAttack");
         }
         
-        Debug.Log("Scythe attack triggered");
+        Debug.Log("Scythe attack ");
     }
     
     private IEnumerator AxeProjectile()
@@ -342,7 +342,7 @@ public class WeaponBehavior : MonoBehaviour
                  
                     hasHitEnemy = true;
                     
-                    Debug.Log($"Axe hit {enemy.name} for {damage} damage");
+                    Debug.Log($"axe hit {enemy.name} for {damage} damage");
                 }
             }
         }
