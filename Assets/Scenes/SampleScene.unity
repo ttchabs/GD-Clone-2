@@ -6379,7 +6379,7 @@ MonoBehaviour:
   axeReturnSound: {fileID: 0}
   axeHitSound: {fileID: 0}
   scytheSwipeSound: {fileID: 8300000, guid: a8a4cabe6c3e424439dff38250b5c687, type: 3}
-  attackEffect: {fileID: 0}
+  attackEffect: {fileID: 7364936370289906279, guid: 74c549d1b06b6b140a1fd9536eea637f, type: 3}
 --- !u!1 &1270507153
 GameObject:
   m_ObjectHideFlags: 0

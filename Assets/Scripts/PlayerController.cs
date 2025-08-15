@@ -478,10 +478,10 @@ public class PlayerController : MonoBehaviour
     
     public void Attack()
     {
-        // Check if we have enough stamina to attack
+       
         if (staminaSystem != null && !staminaSystem.CanAttack())
         {
-            Debug.Log("Not enough stamina to attack");
+            // Debug.Log("Not enough stamina to attack");
             return;
         }
         
@@ -552,11 +552,11 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // For projectile weapons, just handle cooldown
+            //  projectile weapons, just handle cooldown
             StartCoroutine(HandleProjectileAttackCooldown());
         }
         
-        Debug.Log($"Attacking with {weaponSystem?.GetCurrentWeapon()?.weaponName} - combo: {currentCombo}");
+       
     }
     
     private bool IsCurrentWeaponMelee()
@@ -678,7 +678,9 @@ public class PlayerController : MonoBehaviour
                 bool damageDealt = enemyHealth.TakeDamage(finalDamage, attackDirection);
                 if (damageDealt)
                 {
-                    Debug.Log($"combo {currentCombo}: hit {enemy.name} for {finalDamage} damage!");
+                 
+
+
                 }
             }
         }
