@@ -238,31 +238,37 @@ HandleWallSliding();
         }
     }
     
-    private void OnWeapon1Performed(InputAction.CallbackContext context)
-    {
-        if (weaponSystem != null)
-        {
-            weaponSystem.SwitchToWeapon(0);
-        }
-    }
+        #endregion
     
-    private void OnWeapon2Performed(InputAction.CallbackContext context)
+#region Weapon Switching 
+
+private void OnWeapon1Performed(InputAction.CallbackContext context)
+{
+    if (weaponSystem != null)
     {
-        if (weaponSystem != null)
-        {
-            weaponSystem.SwitchToWeapon(1);
-        }
+        weaponSystem.SwitchToWeapon(0);
     }
-    
-    private void OnWeapon3Performed(InputAction.CallbackContext context)
+}
+
+private void OnWeapon2Performed(InputAction.CallbackContext context)
+{
+    if (weaponSystem != null)
     {
-        if (weaponSystem != null)
-        {
-            weaponSystem.SwitchToWeapon(2);
-        }
+        weaponSystem.SwitchToWeapon(1);
     }
+}
+
+private void OnWeapon3Performed(InputAction.CallbackContext context)
+{
+    if (weaponSystem != null)
+    {
+        weaponSystem.SwitchToWeapon(2);
+    }
+}
+
+#endregion
     
-    #endregion
+
     
     #region Movement
     
