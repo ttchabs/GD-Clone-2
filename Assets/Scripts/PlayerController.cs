@@ -64,7 +64,8 @@ public class PlayerController : MonoBehaviour
     private bool canAttack = true;
     private float lastAttackTime;
     private bool facingRight = true;
-    
+    private bool movementDisabled; //for wall jump
+
     private bool isTouchingWallLeft;
     private bool isTouchingWallRight;
     private bool isTouchingWall;
@@ -269,6 +270,8 @@ public class PlayerController : MonoBehaviour
     
     private void HandleMovement()
     {
+        if (movementDisabled) return;
+
         bool canSprint = staminaSystem != null ? staminaSystem.CanSprint() : true;
         bool shouldSprint = sprintInput && canSprint && Mathf.Abs(moveInput.x) > 0;
         
@@ -443,10 +446,10 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator DisableMovementBriefly(float duration)
     {
-        bool originalInput = sprintInput;
-        Vector2 originalMoveInput = moveInput;
-
+        movementDisabled = true;
         yield return new WaitForSeconds(duration);
+        movementDisabled = false;
+        
     }
 
     #endregion

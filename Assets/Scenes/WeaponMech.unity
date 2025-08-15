@@ -143,7 +143,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &45229165
 Rigidbody2D:
   serializedVersion: 4
@@ -189,6 +189,8 @@ MonoBehaviour:
   knockbackDuration: 0.2
   flashDuration: 0.1
   damageColor: {r: 1, g: 0, b: 0, a: 1}
+  particles: {fileID: 0}
+  ashPrefab: {fileID: 0}
 --- !u!114 &45229167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,6 +407,8 @@ MonoBehaviour:
   knockbackDuration: 0.2
   flashDuration: 0.1
   damageColor: {r: 1, g: 0, b: 0, a: 1}
+  particles: {fileID: 0}
+  ashPrefab: {fileID: 0}
 --- !u!114 &139594848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,9 +684,10 @@ MonoBehaviour:
   weaponSprite: {fileID: -7290326746349690423, guid: 3bb85f94edc92a349bf8517335b86d5b, type: 3}
   interactionRange: 2
   interactKey: 105
-  interactionUI: {fileID: 0}
-  interactionText: {fileID: 0}
-  worldCanvas: {fileID: 845322043}
+  interactionPrompt: {fileID: 0}
+  promptText: {fileID: 0}
+  collectSound: {fileID: 0}
+  collectParticles: {fileID: 0}
   floatSpeed: 5
   floatHeight: 1
   collectionDuration: 1
@@ -797,6 +802,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!4 &358803080 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2808163169318231414, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+  m_PrefabInstance: {fileID: 7679576034913867919}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &482869223
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,12 +1054,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.73, y: -0.29311317, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 358803080}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &655157860
 GameObject:
@@ -1462,12 +1472,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 742a58bb309b06c4f8d528b3426537d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponSlotPrefab: {fileID: 0}
-  weaponContainer: {fileID: 0}
-  slotSpacing: 80
-  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  unlockedColor: {r: 1, g: 1, b: 1, a: 1}
+  slot1:
+    slotContainer: {fileID: 0}
+    weaponIcon: {fileID: 0}
+    slotBackground: {fileID: 0}
+    lockedOverlay: {fileID: 0}
+  slot2:
+    slotContainer: {fileID: 0}
+    weaponIcon: {fileID: 0}
+    slotBackground: {fileID: 0}
+    lockedOverlay: {fileID: 0}
+  slot3:
+    slotContainer: {fileID: 0}
+    weaponIcon: {fileID: 0}
+    slotBackground: {fileID: 0}
+    lockedOverlay: {fileID: 0}
   selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
   selectedScale: 1.2
   normalScale: 1
 --- !u!1 &1437346757
@@ -1670,9 +1691,10 @@ MonoBehaviour:
   weaponSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   interactionRange: 2
   interactKey: 105
-  interactionUI: {fileID: 0}
-  interactionText: {fileID: 0}
-  worldCanvas: {fileID: 845322043}
+  interactionPrompt: {fileID: 0}
+  promptText: {fileID: 0}
+  collectSound: {fileID: 0}
+  collectParticles: {fileID: 0}
   floatSpeed: 1
   floatHeight: 0.5
   collectionDuration: 1
@@ -22360,7 +22382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1780115899
 Animator:
   serializedVersion: 5
@@ -22447,6 +22469,8 @@ MonoBehaviour:
   knockbackDuration: 0.2
   flashDuration: 0.1
   damageColor: {r: 1, g: 0, b: 0, a: 1}
+  particles: {fileID: 0}
+  ashPrefab: {fileID: 0}
 --- !u!114 &1780115903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22709,9 +22733,10 @@ MonoBehaviour:
   weaponSprite: {fileID: 3251871555124654486, guid: b6b6796d98449dc45aee8ed13d24e44f, type: 3}
   interactionRange: 2
   interactKey: 105
-  interactionUI: {fileID: 0}
-  interactionText: {fileID: 0}
-  worldCanvas: {fileID: 845322043}
+  interactionPrompt: {fileID: 0}
+  promptText: {fileID: 0}
+  collectSound: {fileID: 0}
+  collectParticles: {fileID: 0}
   floatSpeed: 5
   floatHeight: 1
   collectionDuration: 1
@@ -22886,16 +22911,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6259722591299731656, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: wallJumpForce
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6259722591299731656, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: wallSlideSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6259722591299731656, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: wallJumpHorizontalForce
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2808163169318231414, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 519420032}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 519420032}
   - {fileID: 736763767}
   - {fileID: 1437346758}
   - {fileID: 7679576034913867919}
