@@ -34,6 +34,8 @@ public class EnemyHealth : MonoBehaviour
 
     public System.Action<int> OnHealthChanged;
     public System.Action OnDeath;
+
+    private AshSystem ashManager;
     
     private void Awake()
     {
@@ -44,6 +46,8 @@ public class EnemyHealth : MonoBehaviour
         
         currentHealth = maxHealth;
         originalColor = spriteRenderer.color;
+
+        ashManager = FindFirstObjectByType<AshSystem>();
     }
     
     private void Update()
@@ -196,8 +200,10 @@ public class EnemyHealth : MonoBehaviour
             col.enabled = false;
         }
         
+        ashManager.addDeath();
  
         OnDeath?.Invoke();
+        
         
      
         Destroy(gameObject, 1f);
