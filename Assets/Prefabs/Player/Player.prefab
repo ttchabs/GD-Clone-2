@@ -30,6 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7330007200353700092}
+  - {fileID: 8534321940567979971}
   m_Father: {fileID: 2808163169318231414}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4231978307819028490
@@ -71,7 +72,6 @@ Transform:
   - {fileID: 6934798139719934875}
   - {fileID: 8977136459573314510}
   - {fileID: 6216839020540341638}
-  - {fileID: 8534321940567979971}
   - {fileID: 1497963257963898512}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -144,6 +144,13 @@ MonoBehaviour:
   jumpForce: 12
   coyoteTime: 0.2
   jumpBufferTime: 0.2
+  wallCheckLeft: {fileID: 0}
+  wallCheckRight: {fileID: 0}
+  wallCheckDistance: 0.5
+  wallJumpForce: 12
+  wallJumpHorizontalForce: 8
+  wallSlideSpeed: 2
+  enableWallSliding: 1
   groundCheck: {fileID: 6216839020540341638}
   groundCheckRadius: 0.2
   groundLayerMask:
@@ -251,6 +258,7 @@ MonoBehaviour:
     attackSpeed: 0
     range: 0
     isUnlocked: 0
+    weaponInstance: {fileID: 0}
   - weaponID: 0
     weaponName: 
     weaponPrefab: {fileID: 0}
@@ -259,6 +267,7 @@ MonoBehaviour:
     attackSpeed: 0
     range: 0
     isUnlocked: 0
+    weaponInstance: {fileID: 0}
   - weaponID: 0
     weaponName: 
     weaponPrefab: {fileID: 0}
@@ -267,7 +276,11 @@ MonoBehaviour:
     attackSpeed: 0
     range: 0
     isUnlocked: 0
+    weaponInstance: {fileID: 0}
   weaponHolder: {fileID: 8534321940567979971}
+  weapon1GameObject: {fileID: 0}
+  weapon2GameObject: {fileID: 0}
+  weapon3GameObject: {fileID: 0}
   inventoryUI: {fileID: 0}
 --- !u!95 &997243573207363996
 Animator:
@@ -569,12 +582,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7202428871770432410}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.67, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2808163169318231414}
+  m_Father: {fileID: 8977136459573314510}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7375061791497616089
 GameObject:
