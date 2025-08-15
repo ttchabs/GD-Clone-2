@@ -12,18 +12,19 @@ public class ParticleSpawner : MonoBehaviour
     private ParticleSystem ashChild;
     private void Start()
     {
-        bloodChild = blood;
-        ashChild = ash;
+        
     }
 
     public void spawn(string name) {
         switch (name)
         {
             case "blood":
-                children.Add(bloodChild);
+                Instantiate(blood);
+                //children.Add(bloodChild);
                 break;
             case "ash":
-                children.Add(ashChild);
+                Instantiate(blood);
+                //children.Add(ashChild);
                 break;
             default: 
                 print("Particle: " + name + " not found");

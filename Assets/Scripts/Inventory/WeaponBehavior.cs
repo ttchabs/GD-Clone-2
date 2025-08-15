@@ -20,7 +20,9 @@ public class WeaponBehavior : MonoBehaviour
     [SerializeField] private AudioClip axeHitSound;
     [SerializeField] private AudioClip scytheSwipeSound;
     [SerializeField] private ParticleSystem attackEffect;
-    
+
+    //[Header("Damage Numbers")] [SerializeField]
+    //private int damage = 0;
    
     private SpriteRenderer weaponSprite;
     private AudioSource audioSource;
@@ -170,10 +172,51 @@ public class WeaponBehavior : MonoBehaviour
         {
             playerAnimator.SetTrigger("ScytheAttack");
         }
-        
+
+        MeleeAttack();
         Debug.Log("Scythe attack ");
     }
-    
+
+    private void MeleeAttack()
+    {
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 0.5f, enemyLayerMask);
+        int damage = 0;
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            var enemyHealth = enemy.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+               
+                WeaponSystem weaponSystem = player?.GetComponent<WeaponSystem>();
+                switch (weaponType)
+                {
+                    case WeaponType.Scythe:
+                        damage = weaponSystem.GetCurrentWeapon().damage = 20;
+                        break;
+                    case WeaponType.Sword:
+                        damage = weaponSystem.GetCurrentWeapon().damage = 30;
+                        break;
+                }
+                
+                
+                Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
+                bool damageDealt = enemyHealth.TakeDamage(damage, attackDirection);
+                
+                if (damageDealt)
+                {
+                    if (audioSource != null && axeHitSound != null)
+                    {
+                        audioSource.PlayOneShot(axeHitSound);
+                    }
+                    
+                    hasHitEnemy = true;
+                    
+                    Debug.Log($"{weaponType} hit {enemy.name} for {damage} damage");
+                }
+            }
+        }
+    }
+
     private IEnumerator AxeProjectile()
     {
         isProjectileActive = true;
@@ -267,6 +310,11 @@ public class WeaponBehavior : MonoBehaviour
                     elapsedTime = 0f;
                 }
             }
+
+            if (hasHitEnemy)
+            {
+                targetPoint = player.transform.position;
+            }
             
             yield return null;
         }
@@ -326,7 +374,7 @@ public class WeaponBehavior : MonoBehaviour
             {
                
                 WeaponSystem weaponSystem = player?.GetComponent<WeaponSystem>();
-                int damage = weaponSystem?.GetCurrentWeapon()?.damage ?? 15;
+                int damage = weaponSystem.GetCurrentWeapon().damage = 15;
                 
                 Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
                 bool damageDealt = enemyHealth.TakeDamage(damage, attackDirection);
@@ -344,6 +392,7 @@ public class WeaponBehavior : MonoBehaviour
                     
                     Debug.Log($"axe hit {enemy.name} for {damage} damage");
                 }
+                
             }
         }
     }
@@ -366,4 +415,9 @@ public class WeaponBehavior : MonoBehaviour
         weaponType = type;
         SetIdleState();
     }
+
+    // public int getDamage()
+    // {
+    //     return damage;
+    // }
 }
