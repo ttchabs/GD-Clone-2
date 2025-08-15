@@ -15,7 +15,8 @@ public class EnemyHealth : MonoBehaviour
     [Header("Visual Feedback")]
     [SerializeField] private float flashDuration = 0.1f;
     [SerializeField] private Color damageColor = Color.red;
-    
+    [SerializeField] private ParticleSpawner particles;
+    [SerializeField] private GameObject ashPrefab;
  
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -115,7 +116,11 @@ public class EnemyHealth : MonoBehaviour
         {
             animator.SetTrigger("TakeDamage");
         }
-        
+
+        if (particles != null)
+        {
+            particles.spawn("blood");
+        }
       
         OnHealthChanged?.Invoke(currentHealth);
         
@@ -179,14 +184,19 @@ public class EnemyHealth : MonoBehaviour
             rb.velocity = Vector2.zero;
             rb.isKinematic = true;
         }
-        
+
+        if (particles != null)
+        {
+            particles.spawn("ash");
+        }
         
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
         {
             col.enabled = false;
         }
-        
+
+        Instantiate(ashPrefab);
  
         OnDeath?.Invoke();
         
