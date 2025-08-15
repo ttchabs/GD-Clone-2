@@ -222,7 +222,7 @@ public class StaminaSystem : MonoBehaviour
             OnStaminaDepleted?.Invoke();
         }
         
-        Debug.Log($"Used {staminaCost} stamina for attack. Remaining: {currentStamina:F1}");
+       
         return true;
     }
     

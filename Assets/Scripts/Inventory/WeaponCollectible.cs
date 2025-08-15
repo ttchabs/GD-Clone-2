@@ -13,22 +13,24 @@ public class WeaponCollectible : MonoBehaviour
     [SerializeField] private float interactionRange = 2f;
     [SerializeField] private KeyCode interactKey = KeyCode.I;
     
-    [Header("UI References")]
-    [SerializeField] private GameObject interactionUI;
-    [SerializeField] private Text interactionText;
-    [SerializeField] private Canvas worldCanvas;
+    [Header("Interaction UI")]
+    [SerializeField] private GameObject interactionPrompt; // Assign in inspector
+    [SerializeField] private Text promptText; // Optional: to customize text
     
-    [Header("Collection Animation")]
+    [Header("Collection Effects")]
+    [SerializeField] private AudioClip collectSound;
+    [SerializeField] private ParticleSystem collectParticles;
     [SerializeField] private float floatSpeed = 5f;
     [SerializeField] private float floatHeight = 1f;
     [SerializeField] private float collectionDuration = 1f;
     [SerializeField] private AnimationCurve collectionCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     
-   
+    // Components
     private SpriteRenderer spriteRenderer;
     private Collider2D weaponCollider;
+    private AudioSource audioSource;
     
-   
+    // State
     private Transform player;
     private bool playerInRange = false;
     private bool isCollected = false;
@@ -38,112 +40,58 @@ public class WeaponCollectible : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         weaponCollider = GetComponent<Collider2D>();
+        audioSource = GetComponent<AudioSource>();
         originalPosition = transform.position;
         
-      
+        // Set weapon sprite
         if (spriteRenderer != null && weaponSprite != null)
         {
             spriteRenderer.sprite = weaponSprite;
         }
         
-        
+        // Find player
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
             player = playerObj.transform;
         }
         
-        
-        SetupInteractionUI();
-    }
-    
-    private void SetupInteractionUI()
-    {
-        if (interactionUI == null)
+        // Setup audio source if needed
+        if (audioSource == null && collectSound != null)
         {
-            CreateDefaultInteractionUI();
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
         }
         
-        if (interactionText != null)
-        {
-            interactionText.text = $"Press {interactKey} to collect {weaponName}";
-        }
+        // Setup interaction prompt
+        SetupInteractionPrompt();
         
-       
-        if (interactionUI != null)
+        // Hide interaction prompt initially
+        if (interactionPrompt != null)
         {
-            interactionUI.SetActive(false);
+            interactionPrompt.SetActive(false);
         }
     }
     
-    private void CreateDefaultInteractionUI()
+    private void SetupInteractionPrompt()
     {
-        
-        if (worldCanvas == null)
+        if (promptText != null)
         {
-            GameObject canvasObj = new GameObject("WeaponUI_Canvas");
-            canvasObj.transform.SetParent(transform);
-            canvasObj.transform.localPosition = Vector3.up * 1.5f;
-            
-            worldCanvas = canvasObj.AddComponent<Canvas>();
-            worldCanvas.renderMode = RenderMode.WorldSpace;
-            worldCanvas.worldCamera = Camera.main;
-            
-            CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
-            scaler.dynamicPixelsPerUnit = 100f;
-            
-            RectTransform canvasRect = canvasObj.GetComponent<RectTransform>();
-            canvasRect.sizeDelta = new Vector2(3f, 1f);
+            promptText.text = $"Press {interactKey} to collect {weaponName}";
         }
-        
-       
-        GameObject uiObj = new GameObject("InteractionUI");
-        uiObj.transform.SetParent(worldCanvas.transform);
-        uiObj.transform.localPosition = Vector3.zero;
-        uiObj.transform.localScale = Vector3.one;
-        
-        
-        Image background = uiObj.AddComponent<Image>();
-        background.color = new Color(0, 0, 0, 0.7f);
-        
-        RectTransform uiRect = uiObj.GetComponent<RectTransform>();
-        uiRect.anchorMin = Vector2.zero;
-        uiRect.anchorMax = Vector2.one;
-        uiRect.offsetMin = Vector2.zero;
-        uiRect.offsetMax = Vector2.zero;
-        
-       
-        GameObject textObj = new GameObject("InteractionText");
-        textObj.transform.SetParent(uiObj.transform);
-        
-        Text text = textObj.AddComponent<Text>();
-        text.text = $"Press {interactKey} to collect {weaponName}";
-        text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        text.fontSize = 12;
-        text.color = Color.white;
-        text.alignment = TextAnchor.MiddleCenter;
-        
-        RectTransform textRect = textObj.GetComponent<RectTransform>();
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = new Vector2(10, 5);
-        textRect.offsetMax = new Vector2(-10, -5);
-        
-        interactionUI = uiObj;
-        interactionText = text;
     }
     
     private void Update()
     {
         if (isCollected) return;
         
+        // Floating animation
+        FloatingAnimation();
         
-        FloatingAnimation(); //maybe weapon is floating
-        
-      
+        // Check player distance
         CheckPlayerDistance();
         
-        
+        // Handle interaction input
         if (playerInRange && Input.GetKeyDown(interactKey))
         {
             CollectWeapon();
@@ -167,9 +115,10 @@ public class WeaponCollectible : MonoBehaviour
         {
             playerInRange = inRange;
             
-            if (interactionUI != null)
+            // Show/hide interaction prompt
+            if (interactionPrompt != null)
             {
-                interactionUI.SetActive(playerInRange);
+                interactionPrompt.SetActive(playerInRange);
             }
         }
     }
@@ -178,58 +127,69 @@ public class WeaponCollectible : MonoBehaviour
     {
         if (isCollected) return;
         
-       
+        // Find weapon system
         WeaponSystem weaponSystem = player.GetComponent<WeaponSystem>();
         if (weaponSystem == null)
         {
-          
+            Debug.LogError("Player doesn't have a WeaponSystem component!");
             return;
         }
         
-      
+        // Try to unlock weapon
         bool unlocked = weaponSystem.UnlockWeapon(weaponID);
         if (unlocked)
         {
             isCollected = true;
-            StartCoroutine(CollectionAnimation());
+            StartCoroutine(CollectionSequence());
         }
     }
     
-    private IEnumerator CollectionAnimation()
+    private IEnumerator CollectionSequence()
     {
-        
-        if (interactionUI != null)
+        // Hide interaction prompt
+        if (interactionPrompt != null)
         {
-            interactionUI.SetActive(false);
+            interactionPrompt.SetActive(false);
         }
         
-        
+        // Disable collider
         if (weaponCollider != null)
         {
             weaponCollider.enabled = false;
         }
         
-       
+        // Play collect sound
+        if (audioSource != null && collectSound != null)
+        {
+            audioSource.PlayOneShot(collectSound);
+        }
+        
+        // Play particles
+        if (collectParticles != null)
+        {
+            collectParticles.Play();
+        }
+        
+        // Float to player animation
         Vector3 startPos = transform.position;
         Vector3 targetPos = player.position + Vector3.up * 0.5f;
         
         float elapsedTime = 0f;
         
-        //  weapon float to player
         while (elapsedTime < collectionDuration)
         {
             elapsedTime += Time.deltaTime;
             float progress = elapsedTime / collectionDuration;
             float curveValue = collectionCurve.Evaluate(progress);
             
-            // move towards player
+            // Move towards player
             transform.position = Vector3.Lerp(startPos, targetPos, curveValue);
             
-            
+            // Scale down
             float scale = Mathf.Lerp(1f, 0.2f, curveValue);
             transform.localScale = Vector3.one * scale;
             
-           
+            // Fade out
             if (spriteRenderer != null)
             {
                 Color color = spriteRenderer.color;
@@ -240,11 +200,14 @@ public class WeaponCollectible : MonoBehaviour
             yield return null;
         }
         
+        // Wait a bit for sound to finish
+        yield return new WaitForSeconds(0.2f);
         
+        // Destroy the object
         Destroy(gameObject);
     }
     
-   
+    // Public method to set weapon data (useful for spawning weapons dynamically)
     public void SetWeaponData(int id, string name, Sprite sprite)
     {
         weaponID = id;
@@ -256,19 +219,16 @@ public class WeaponCollectible : MonoBehaviour
             spriteRenderer.sprite = weaponSprite;
         }
         
-        if (interactionText != null)
-        {
-            interactionText.text = $"Press {interactKey} to collect {weaponName}";
-        }
+        SetupInteractionPrompt();
     }
     
     private void OnDrawGizmosSelected()
     {
-       
+        // Draw interaction range
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, interactionRange);
         
-       
+        // Draw original position
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(originalPosition, Vector3.one * 0.2f);
     }

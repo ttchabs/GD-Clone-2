@@ -54,7 +54,7 @@ public class ProjectileScript : MonoBehaviour
             hasHitTarget = true;
             DestroyProjectile();
         }
-        else if (other.CompareTag("Ground") || other.CompareTag("Wall"))
+        else if (other.CompareTag("Ground") )//|| other.CompareTag("Wall")
         {
            
             hasHitTarget = true;
