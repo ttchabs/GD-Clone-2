@@ -436,7 +436,7 @@ public class PlayerController : MonoBehaviour
         coyoteTimeCounter = 0;
         isWallSliding = false;
 
-        StartCoroutine(DisableMovementBriefly(0.1f));
+        StartCoroutine(DisableMovementBriefly(0.5f));
 
         Debug.Log("wall jumping yay");
     }
