@@ -370,15 +370,52 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3038495274870128748}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1eccc7cdabfdce14abb70549186c88c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idlePosition: {x: 0, y: 0, z: 0}
-  idleRotation: {x: 0, y: 0, z: 0}
-  attackPosition: {x: 0, y: 0, z: 0}
-  attackRotation: {x: 0, y: 0, z: 0}
+  weaponType: 2
+  swordIdlePosition: {x: 0, y: 0, z: 0}
+  swordIdleRotation: {x: 0, y: 0, z: 0}
+  swordAttackPosition: {x: 0.5, y: 0, z: 0}
+  swordAttackRotation: {x: 0, y: 0, z: -30}
+  scytheIdlePosition: {x: 0, y: 0, z: 0}
+  scytheIdleRotation: {x: 0, y: 0, z: 0}
+  scytheAttackPosition: {x: 0.8, y: 0.2, z: 0}
+  scytheAttackRotation: {x: 0, y: 0, z: -45}
+  greatswordIdlePosition: {x: 0, y: 0, z: 0}
+  greatswordIdleRotation: {x: 0, y: 0, z: 0}
+  greatswordAttackPosition: {x: 0.3, y: 0.5, z: 0}
+  greatswordAttackRotation: {x: 0, y: 0, z: -60}
+  projectileSpeed: 15
+  projectileRange: 8
+  returnSpeed: 12
+  projectileCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotationSpeed: 720
   animationSpeed: 5
   attackCurve:
     serializedVersion: 2
@@ -404,3 +441,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  swordSlashSound: {fileID: 0}
+  scytheThrowSound: {fileID: 0}
+  scytheReturnSound: {fileID: 0}
+  greatswordSlamSound: {fileID: 0}
+  attackEffect: {fileID: 0}

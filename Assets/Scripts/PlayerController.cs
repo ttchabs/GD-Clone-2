@@ -267,7 +267,6 @@ private void OnWeapon3Performed(InputAction.CallbackContext context)
 }
 
 #endregion
-    
 
     
     #region Movement
@@ -556,7 +555,7 @@ private void PerformRegularJump()
         //  attack collider coroutine
         StartCoroutine(ColliderSwitch());
         
-        Debug.Log($"doing attack {noOfClicks} ... combo: {currentCombo}");
+        // Debug.Log($"doing attack {noOfClicks} ... combo: {currentCombo}");
     }
     
     private void HandleCombo()

@@ -6,36 +6,35 @@ public class Weapon
 {
     public int weaponID;
     public string weaponName;
-    public GameObject weaponPrefab; // Not used for pre-placed weapons, but kept for compatibility
-    public Sprite weaponIcon; // For UI display
+    public GameObject weaponPrefab;
+    public Sprite weaponIcon; 
     public int damage;
     public float attackSpeed;
     public float range;
     public bool isUnlocked;
     
     [HideInInspector]
-    public GameObject weaponInstance; // Runtime reference to the weapon GameObject
+    public GameObject weaponInstance; 
 }
 
 public class WeaponSystem : MonoBehaviour
 {
     [Header("Weapon Configuration")]
     [SerializeField] private List<Weapon> availableWeapons = new List<Weapon>();
-    [SerializeField] private Transform weaponHolder; // Your existing WeaponHolder under Player
-    
+    [SerializeField] private Transform weaponHolder; 
     [Header("Pre-placed Weapon References")]
-    [SerializeField] private GameObject weapon1GameObject; // Your existing "fakesword"
-    [SerializeField] private GameObject weapon2GameObject; // Your existing axe (inactive)
-    [SerializeField] private GameObject weapon3GameObject; // Your existing bow (inactive)
+    [SerializeField] private GameObject weapon1GameObject; //fakesword"
+    [SerializeField] private GameObject weapon2GameObject; //axe (inactive)
+    [SerializeField] private GameObject weapon3GameObject; // scythe 
     
     [Header("UI References")]
     [SerializeField] private WeaponInventoryUI inventoryUI;
     
-    // Current weapon state
+    
     private int currentWeaponIndex = 0;
     private Weapon currentWeapon;
     
-    // Events
+  
     public System.Action<Weapon> OnWeaponChanged;
     public System.Action<Weapon> OnWeaponUnlocked;
     
@@ -47,29 +46,29 @@ public class WeaponSystem : MonoBehaviour
             weaponHolder = transform.Find("WeaponHolder");
             if (weaponHolder == null)
             {
-                Debug.LogError("WeaponHolder not found! Please assign it in the inspector.");
+                // Debug.LogError("WeaponHolder not found! Please assign it in the inspector.");
             }
         }
         
-        // Auto-find weapons if not assigned
+       
         AutoFindWeaponsIfNeeded();
         
-        // Initialize weapons - only weapon 1 is unlocked at start
+        // - only weapon 1 is unlocked at start
         InitializeWeapons();
     }
     
     private void Start()
     {
-        // Link pre-placed weapons to weapon data
+       
         LinkPrePlacedWeapons();
         
-        // Equip the first weapon
+       
         if (availableWeapons.Count > 0)
         {
             EquipWeapon(0);
         }
         
-        // Update UI
+       
         if (inventoryUI != null)
         {
             inventoryUI.Initialize(this);
@@ -78,7 +77,7 @@ public class WeaponSystem : MonoBehaviour
     
     private void AutoFindWeaponsIfNeeded()
     {
-        // Try to find weapons automatically if not assigned
+       
         if (weapon1GameObject == null)
         {
             weapon1GameObject = transform.Find("fakesword")?.gameObject;
@@ -90,7 +89,7 @@ public class WeaponSystem : MonoBehaviour
         
         if (weapon2GameObject == null && weaponHolder != null)
         {
-            // Look for common axe names
+            
             weapon2GameObject = weaponHolder.Find("axe")?.gameObject;
             if (weapon2GameObject == null)
                 weapon2GameObject = weaponHolder.Find("Axe")?.gameObject;
@@ -100,10 +99,10 @@ public class WeaponSystem : MonoBehaviour
         
         if (weapon3GameObject == null && weaponHolder != null)
         {
-            // Look for common bow names
-            weapon3GameObject = weaponHolder.Find("bow")?.gameObject;
+            
+            weapon3GameObject = weaponHolder.Find("scythe")?.gameObject;
             if (weapon3GameObject == null)
-                weapon3GameObject = weaponHolder.Find("Bow")?.gameObject;
+                weapon3GameObject = weaponHolder.Find("Scythe")?.gameObject;
             if (weapon3GameObject == null)
                 weapon3GameObject = weaponHolder.Find("weapon3")?.gameObject;
         }
@@ -113,41 +112,41 @@ public class WeaponSystem : MonoBehaviour
     {
         for (int i = 0; i < availableWeapons.Count; i++)
         {
-            // Only weapon 1 (index 0) starts unlocked
+           
             availableWeapons[i].isUnlocked = (i == 0);
         }
     }
     
     private void LinkPrePlacedWeapons()
     {
-        // Link weapon GameObjects to weapon data
+        
         GameObject[] weaponObjects = { weapon1GameObject, weapon2GameObject, weapon3GameObject };
         
         for (int i = 0; i < availableWeapons.Count && i < weaponObjects.Length; i++)
         {
             if (weaponObjects[i] != null)
             {
-                // Link the pre-placed GameObject
+                
                 availableWeapons[i].weaponInstance = weaponObjects[i];
                 
-                // Set weapon name for identification
+               
                 weaponObjects[i].name = $"Weapon_{availableWeapons[i].weaponName}";
                 
-                // Set initial state - only weapon 1 should be active
+                
                 weaponObjects[i].SetActive(i == 0 && availableWeapons[i].isUnlocked);
                 
-                Debug.Log($"Linked pre-placed weapon: {availableWeapons[i].weaponName} (Active: {weaponObjects[i].activeInHierarchy})");
+              
             }
             else
             {
-                Debug.LogWarning($"Weapon {i + 1} GameObject not assigned or found!");
+               
             }
         }
     }
     
     public void SwitchToWeapon(int weaponIndex)
     {
-        // Check if weapon exists and is unlocked
+      
         if (weaponIndex < 0 || weaponIndex >= availableWeapons.Count)
         {
             Debug.LogWarning($"Weapon index {weaponIndex} is out of range!");
@@ -156,7 +155,7 @@ public class WeaponSystem : MonoBehaviour
         
         if (!availableWeapons[weaponIndex].isUnlocked)
         {
-            Debug.Log($"Weapon {availableWeapons[weaponIndex].weaponName} is not unlocked yet!");
+            // Debug.Log($"Weapon {availableWeapons[weaponIndex].weaponName} is not unlocked yet!");
             return;
         }
         
@@ -165,12 +164,12 @@ public class WeaponSystem : MonoBehaviour
     
     private void EquipWeapon(int weaponIndex)
     {
-        // Handle current weapon unequipping
+       
         if (currentWeapon != null && currentWeapon.weaponInstance != null)
         {
             currentWeapon.weaponInstance.SetActive(false);
             
-            // Call unequip behavior if available
+           
             WeaponBehavior currentBehavior = currentWeapon.weaponInstance.GetComponent<WeaponBehavior>();
             if (currentBehavior != null)
             {
@@ -178,16 +177,16 @@ public class WeaponSystem : MonoBehaviour
             }
         }
         
-        // Set new current weapon
+       
         currentWeaponIndex = weaponIndex;
         currentWeapon = availableWeapons[weaponIndex];
         
-        // Activate new weapon if it exists and is unlocked
+        
         if (currentWeapon.weaponInstance != null && currentWeapon.isUnlocked)
         {
             currentWeapon.weaponInstance.SetActive(true);
             
-            // Call equip behavior if available
+           
             WeaponBehavior newBehavior = currentWeapon.weaponInstance.GetComponent<WeaponBehavior>();
             if (newBehavior != null)
             {
@@ -195,21 +194,21 @@ public class WeaponSystem : MonoBehaviour
             }
         }
         
-        // Update UI
+      
         if (inventoryUI != null)
         {
             inventoryUI.UpdateSelection(currentWeaponIndex);
         }
         
-        // Invoke event
+        
         OnWeaponChanged?.Invoke(currentWeapon);
         
-        Debug.Log($"Equipped weapon: {currentWeapon.weaponName}");
+       
     }
     
     public bool UnlockWeapon(int weaponID)
     {
-        // Find weapon by ID
+      
         for (int i = 0; i < availableWeapons.Count; i++)
         {
             if (availableWeapons[i].weaponID == weaponID)
@@ -218,24 +217,24 @@ public class WeaponSystem : MonoBehaviour
                 {
                     availableWeapons[i].isUnlocked = true;
                     
-                    // Update UI
+                   
                     if (inventoryUI != null)
                     {
                         inventoryUI.UnlockWeapon(i);
                     }
                     
-                    // Auto-equip the newly unlocked weapon
+                 
                     EquipWeapon(i);
                     
-                    // Invoke event
+                  
                     OnWeaponUnlocked?.Invoke(availableWeapons[i]);
                     
-                    Debug.Log($"Unlocked weapon: {availableWeapons[i].weaponName}");
+                  
                     return true;
                 }
                 else
                 {
-                    Debug.Log($"Weapon {availableWeapons[i].weaponName} is already unlocked!");
+                   
                     return false;
                 }
             }
@@ -245,7 +244,7 @@ public class WeaponSystem : MonoBehaviour
         return false;
     }
     
-    // Method to handle weapon flipping when player changes direction
+   
     public void FlipWeapons(bool facingRight)
     {
         // Since all weapons are children of weaponHolder or player, flip only the active weapon
@@ -259,7 +258,7 @@ public class WeaponSystem : MonoBehaviour
         }
     }
     
-    // Method to trigger attack animation on current weapon
+    
     public void TriggerWeaponAttack()
     {
         if (currentWeapon != null && currentWeapon.weaponInstance != null && currentWeapon.weaponInstance.activeInHierarchy)
@@ -272,7 +271,7 @@ public class WeaponSystem : MonoBehaviour
         }
     }
     
-    // Public getters
+  
     public Weapon GetCurrentWeapon()
     {
         return currentWeapon;
@@ -301,7 +300,7 @@ public class WeaponSystem : MonoBehaviour
         return availableWeapons[weaponIndex].isUnlocked;
     }
     
-    // Method to get weapon by ID (useful for attack system)
+    
     public Weapon GetWeaponByID(int weaponID)
     {
         for (int i = 0; i < availableWeapons.Count; i++)

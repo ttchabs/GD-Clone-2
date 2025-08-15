@@ -25,20 +25,20 @@ public class WeaponInventoryUI : MonoBehaviour
         public GameObject slotContainer;
         public Image weaponIcon;
         public Image slotBackground;
-        public GameObject lockedOverlay; // Optional overlay for locked slots
+        public GameObject lockedOverlay; 
     }
     
     public void Initialize(WeaponSystem weaponSystem)
     {
         this.weaponSystem = weaponSystem;
         
-        // Setup slots list
+      
         weaponSlots.Clear();
         weaponSlots.Add(slot1);
         weaponSlots.Add(slot2);
         weaponSlots.Add(slot3);
         
-        // Initialize all slots
+        
         InitializeSlots();
         UpdateAllSlots();
     }
@@ -52,19 +52,19 @@ public class WeaponInventoryUI : MonoBehaviour
             WeaponSlot slot = weaponSlots[i];
             Weapon weapon = weapons[i];
             
-            // Set weapon icon (always set, but will be hidden if locked)
+           
             if (slot.weaponIcon != null && weapon.weaponIcon != null)
             {
                 slot.weaponIcon.sprite = weapon.weaponIcon;
             }
             
-            // Initially hide all weapon icons except the first one
+          
             if (slot.weaponIcon != null)
             {
                 slot.weaponIcon.gameObject.SetActive(weapon.isUnlocked);
             }
             
-            // Show/hide locked overlay
+           
             if (slot.lockedOverlay != null)
             {
                 slot.lockedOverlay.SetActive(!weapon.isUnlocked);
@@ -74,13 +74,13 @@ public class WeaponInventoryUI : MonoBehaviour
     
     public void UpdateSelection(int selectedIndex)
     {
-        // Remove selection from previous slot
+        
         if (currentSelectedIndex < weaponSlots.Count)
         {
             SetSlotSelected(weaponSlots[currentSelectedIndex], false);
         }
         
-        // Set new selection
+       
         currentSelectedIndex = selectedIndex;
         if (currentSelectedIndex < weaponSlots.Count)
         {
@@ -94,19 +94,19 @@ public class WeaponInventoryUI : MonoBehaviour
         {
             WeaponSlot slot = weaponSlots[weaponIndex];
             
-            // Show weapon icon
+           
             if (slot.weaponIcon != null)
             {
                 slot.weaponIcon.gameObject.SetActive(true);
             }
             
-            // Hide locked overlay
+           
             if (slot.lockedOverlay != null)
             {
                 slot.lockedOverlay.SetActive(false);
             }
             
-            Debug.Log($"UI: Unlocked weapon slot {weaponIndex + 1}");
+           
         }
     }
     
@@ -119,19 +119,19 @@ public class WeaponInventoryUI : MonoBehaviour
             WeaponSlot slot = weaponSlots[i];
             Weapon weapon = weapons[i];
             
-            // Update weapon icon visibility
+            
             if (slot.weaponIcon != null)
             {
                 slot.weaponIcon.gameObject.SetActive(weapon.isUnlocked);
             }
             
-            // Update locked overlay
+           
             if (slot.lockedOverlay != null)
             {
                 slot.lockedOverlay.SetActive(!weapon.isUnlocked);
             }
             
-            // Update selection state
+            
             SetSlotSelected(slot, i == currentSelectedIndex);
         }
     }
@@ -140,19 +140,19 @@ public class WeaponInventoryUI : MonoBehaviour
     {
         if (slot.slotContainer != null)
         {
-            // Update scale
+            
             float targetScale = selected ? selectedScale : normalScale;
             slot.slotContainer.transform.localScale = Vector3.one * targetScale;
         }
         
         if (slot.slotBackground != null)
         {
-            // Update background color
+            
             slot.slotBackground.color = selected ? selectedColor : normalColor;
         }
     }
     
-    // Public method to show/hide inventory
+  
     public void SetVisible(bool visible)
     {
         gameObject.SetActive(visible);
