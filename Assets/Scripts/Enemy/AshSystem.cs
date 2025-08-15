@@ -30,6 +30,7 @@ public class AshSystem : MonoBehaviour
 
     public void addDeath()
     {
+        print("Collected By Manager");
         currentFill += enemyFillAmount;
     }
 }

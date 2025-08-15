@@ -17,7 +17,8 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private Color damageColor = Color.red;
     [SerializeField] private ParticleSpawner particles;
     
- 
+    [Header("Ash Reference")]
+    [SerializeField] private GameObject ashPrefab;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -199,8 +200,10 @@ public class EnemyHealth : MonoBehaviour
         {
             col.enabled = false;
         }
+
+        Instantiate(ashPrefab);
+        //ashManager.addDeath();
         
-        ashManager.addDeath();
  
         OnDeath?.Invoke();
         
