@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
@@ -30,7 +32,7 @@ public class EnemyHealth : MonoBehaviour
     private bool isKnockedBack;
     private float knockbackTimer;
     private Color originalColor;
-    
+    private Collider2D rbCollider;
 
     public System.Action<int> OnHealthChanged;
     public System.Action OnDeath;
@@ -41,6 +43,7 @@ public class EnemyHealth : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         enemyAI = GetComponent<EnemyAI>();
+        rbCollider = GetComponent<Collider2D>();
         
         currentHealth = maxHealth;
         originalColor = spriteRenderer.color;
@@ -123,7 +126,7 @@ public class EnemyHealth : MonoBehaviour
         }
       
         OnHealthChanged?.Invoke(currentHealth);
-        
+        Instantiate(ashPrefab, transform.position, Quaternion.identity);
        
         if (currentHealth <= 0)
         {
@@ -131,7 +134,6 @@ public class EnemyHealth : MonoBehaviour
             return true;
         }
         
- 
         
         return true;
     }
@@ -224,26 +226,5 @@ public class EnemyHealth : MonoBehaviour
     {
         return isInvulnerable;
     }
-    
- 
-    private void OnDrawGizmosSelected()
-    {
-        
-        Vector3 healthBarPos = transform.position + Vector3.up * 1.5f;
-        float healthBarWidth = 1f;
-        float healthBarHeight = 0.2f;
-        
-      
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(healthBarPos, new Vector3(healthBarWidth, healthBarHeight, 0));
-        
-      
-        if (Application.isPlaying)
-        {
-            float healthPercent = (float)currentHealth / maxHealth;
-            Gizmos.color = Color.green;
-            Vector3 healthFillPos = healthBarPos - Vector3.right * (healthBarWidth * (1 - healthPercent) * 0.5f);
-            Gizmos.DrawCube(healthFillPos, new Vector3(healthBarWidth * healthPercent, healthBarHeight, 0));
-        }
-    }
+
 }
