@@ -7,7 +7,7 @@ public class AshSystem : MonoBehaviour
 {
     [SerializeField] private Image bar;
     private int current;
-    private int total = 2;
+    private int total;
     private float enemyFillAmount;
     private float currentFill = 0;
     private EnemyHealth[] enemies;
@@ -18,15 +18,7 @@ public class AshSystem : MonoBehaviour
     {
         enemies = FindObjectsOfType(typeof(EnemyHealth)) as EnemyHealth[];
         total = enemies.Length;
-        print(total);
-        if(total != 0)
-        {
-            enemyFillAmount = 1 / total;
-        }
-        else
-        {
-            currentFill = 1;
-        }
+        enemyFillAmount = 1 / total;
     }
 
     // Update is called once per frame
