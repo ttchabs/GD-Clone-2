@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class KillBox : MonoBehaviour
+public class CheckpointSystem : MonoBehaviour
 {
-    // public Transform respawnPoint;
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OerEnter2D(Collider2D collision)
     {
+
         if (collision.CompareTag("Player"))
         {
+            Debug.Log("Player has entered the checkpoint area.");
+
             RespawnPlayer respawnPlayer = collision.GetComponent<RespawnPlayer>();
             if (respawnPlayer != null)
             {
-                Debug.Log("Player died, respawning...");
-                respawnPlayer.Respawn();
+                respawnPlayer.SetCheckpoint(transform.position);
+                Debug.Log("Checkpoint reached at " + transform.position);
             }
         }
     }
