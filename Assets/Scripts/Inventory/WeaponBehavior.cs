@@ -132,7 +132,7 @@ public class WeaponBehavior : MonoBehaviour
         {
             playerAnimator.SetTrigger("SwordAttack");
         }
-        
+        DealDamage(Physics2D.OverlapCircleAll(transform.position, 0.5f, enemyLayerMask));
         Debug.Log("Sword attack ");
     }
     
@@ -169,10 +169,50 @@ public class WeaponBehavior : MonoBehaviour
         {
             playerAnimator.SetTrigger("ScytheAttack");
         }
+
+        DealDamage(Physics2D.OverlapCircleAll(transform.position, 0.5f, enemyLayerMask));
+        // Check for overlapping enemies and damage them
         
         Debug.Log("Scythe attack triggered");
     }
-    
+
+    private void DealDamage(Collider2D[] hitEnemies)
+    {
+        var damage = 0;
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            var enemyHealth = enemy.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                // Get weapon damage from the weapon system
+                WeaponSystem weaponSystem = player?.GetComponent<WeaponSystem>();
+
+                if (weaponType == WeaponType.Sword)
+                {
+                    damage = 30;//weaponSystem.GetCurrentWeapon().damage
+                }
+                if (weaponType == WeaponType.Scythe)
+                {
+                    damage = 20; //weaponSystem.GetCurrentWeapon().damage
+                }
+                
+                Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
+                enemyHealth.TakeDamage(damage, attackDirection);
+                // bool damageDealt = 
+                // if (damageDealt)
+                // {
+                //     //  hit sound
+                //     if (audioSource != null && axeHitSound != null)
+                //     {
+                //         audioSource.PlayOneShot(axeHitSound);
+                //     }
+                //     print("ENEMY HIT");
+                //     hasHitEnemy = true;
+                // }
+            }
+        }
+    }
+
     private IEnumerator AxeProjectile()
     {
         isProjectileActive = true;

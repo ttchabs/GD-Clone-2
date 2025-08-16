@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticleSpawner : MonoBehaviour
+public class ParticleSpawner1 : MonoBehaviour
 {
     [SerializeField] public ParticleSystem blood;
     [SerializeField] public ParticleSystem ash;

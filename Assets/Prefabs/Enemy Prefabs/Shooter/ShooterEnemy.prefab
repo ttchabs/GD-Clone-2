@@ -192,6 +192,11 @@ MonoBehaviour:
   flashDuration: 0.1
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   particles: {fileID: 3481285223657349247}
+  ashPrefab: {fileID: 6321718314102759470, guid: f2993b1500bac614fa2477be8e3813f3, type: 3}
+  explosionSound: {fileID: 0}
+  damageSound: {fileID: 0}
+  explosionVolume: 0.8
+  damageVolume: 0.6
 --- !u!50 &3337080031014611316
 Rigidbody2D:
   serializedVersion: 4
@@ -304,8 +309,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb218ee552747d439e81a3c72b2e81f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
-  firePoint: {fileID: 0}
+  projectilePrefab: {fileID: 4412860930724851946, guid: ef80863a05f594a4e8c32944f95d1d34, type: 3}
+  firePoint: {fileID: 3320102720292448396}
   projectileSpeed: 0
   projectileLifetime: 0.2
   projectileDamage: 10

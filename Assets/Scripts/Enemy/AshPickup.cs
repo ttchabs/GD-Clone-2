@@ -7,16 +7,16 @@ public class AshPickup : MonoBehaviour
 {
     [SerializeField] private Collider2D collider;
 
-    private AshSystem ashManager;
+    private AshSystem1 ashManager;
     // Start is called before the first frame update
     private void OnEnable()
     {
-        ashManager = FindFirstObjectByType<AshSystem>();
+        ashManager = FindFirstObjectByType<AshSystem1>();
     }
 
     void Start()
     {
-        ashManager = FindFirstObjectByType<AshSystem>();
+        ashManager = FindFirstObjectByType<AshSystem1>();
         //print(ashManager);
     }
 

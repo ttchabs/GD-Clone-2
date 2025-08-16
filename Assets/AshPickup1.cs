@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AshPickup : MonoBehaviour
+public class AshPickup1 : MonoBehaviour
 {
     [SerializeField] private Collider2D collider;
 

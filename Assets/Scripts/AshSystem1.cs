@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AshSystem : MonoBehaviour
+public class AshSystem1 : MonoBehaviour
 {
     [SerializeField] private Image bar;
     private int current;

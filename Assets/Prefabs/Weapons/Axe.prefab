@@ -335,7 +335,7 @@ PolygonCollider2D:
       - {x: 0.91999996, y: -4.64}
       - {x: 0.94, y: -4.61}
       - {x: 1.4399999, y: -4.37}
-  m_UseDelaunayMesh: 0
+  m_UseDelaunayMesh: 1
 --- !u!50 &1541060365391236807
 Rigidbody2D:
   serializedVersion: 4
@@ -387,4 +387,3 @@ MonoBehaviour:
   axeHitSound: {fileID: 0}
   scytheSwipeSound: {fileID: 0}
   attackEffect: {fileID: 0}
-  damage: 3

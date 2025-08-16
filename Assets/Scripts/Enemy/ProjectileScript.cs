@@ -44,11 +44,10 @@ public class ProjectileScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // damage  player
-            HealthManager healthManager = other.GetComponent<HealthManager>();
+            HealthManager healthManager = FindObjectOfType<HealthManager>();
             if (healthManager != null)
             {
                 healthManager.updateHealth(-damage);
-              
             }
             
             hasHitTarget = true;
@@ -56,7 +55,6 @@ public class ProjectileScript : MonoBehaviour
         }
         else if (other.CompareTag("Ground") )//|| other.CompareTag("Wall")
         {
-           
             hasHitTarget = true;
             DestroyProjectile();
         }
