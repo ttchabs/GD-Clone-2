@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d19880a-a7a9-485b-b340-d2b0c5ecb0fe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.GD-Clone-2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GD-Clone-2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/AshPickup.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/AshPickup.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Blood Particle.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Blood Particle.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy Prefabs/Shooter/ShooterEnemy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy Prefabs/Shooter/ShooterEnemy.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Weapons/Axe.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Weapons/Axe.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Weapons/Cythe.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Weapons/Cythe.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AshSystem.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/AshSystem.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy/EnemyHealth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy/EnemyHealth.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy/ProjectileScript.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy/ProjectileScript.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Inventory/WeaponBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Inventory/WeaponBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ParticleSpawner.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/ParticleSpawner.cs.meta" beforeDir="false" />
-    </list>
+    <list default="true" id="1d19880a-a7a9-485b-b340-d2b0c5ecb0fe" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -127,7 +112,7 @@
       <workItem from="1755090294312" duration="3920000" />
       <workItem from="1755094533704" duration="195000" />
       <workItem from="1755100900610" duration="5432000" />
-      <workItem from="1755350579062" duration="6641000" />
+      <workItem from="1755350579062" duration="7204000" />
     </task>
     <servers />
   </component>
