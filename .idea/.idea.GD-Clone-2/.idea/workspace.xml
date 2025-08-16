@@ -5,32 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d19880a-a7a9-485b-b340-d2b0c5ecb0fe" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/KillBox.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/KillBox.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/testAshSystem.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/testAshSystem.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sprites/barbedWire.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Sprites/barbedWire.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/2barbedWire.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/2barbedWire.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/ashFill.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/ashFill.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/ashPile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/ashPile.png.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/urnBase.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/UI/urnBase.png.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GD-Clone-2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GD-Clone-2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/AshPickup.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AshPickup.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy Prefabs/AshParticle.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy Prefabs/AshParticle.prefab.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Enemy Prefabs/Blood Particle.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Enemy Prefabs/Blood Particle.prefab.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy/AshSystem.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy/AshSystem.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy/EnemyHealth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy/EnemyHealth.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Enemy/ParticleSpawner.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Enemy/ParticleSpawner.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Inventory/WeaponBehavior.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Inventory/WeaponBehavior.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/Particle Sprites/toppng.com-realistic-smoke-texture-with-soft-particle-edges-png-399x385.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/Particle Sprites/toppng.com-realistic-smoke-texture-with-soft-particle-edges-png-399x385.png.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/ashBar.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/ashBar.png.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Sprites/ashBorder.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/ashBorder.png.meta" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +39,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging Charlie-Branch",
+    "git-widget-placeholder": "Charlie-Branch",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -139,6 +114,7 @@
       <workItem from="1755090294312" duration="3920000" />
       <workItem from="1755094533704" duration="195000" />
       <workItem from="1755100900610" duration="5432000" />
+      <workItem from="1755350579062" duration="356000" />
     </task>
     <servers />
   </component>
