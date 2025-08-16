@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
@@ -16,9 +18,8 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float flashDuration = 0.1f;
     [SerializeField] private Color damageColor = Color.red;
     [SerializeField] private ParticleSpawner particles;
-    
-    [Header("Ash Reference")]
     [SerializeField] private GameObject ashPrefab;
+ 
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -31,12 +32,10 @@ public class EnemyHealth : MonoBehaviour
     private bool isKnockedBack;
     private float knockbackTimer;
     private Color originalColor;
-    
+    private Collider2D rbCollider;
 
     public System.Action<int> OnHealthChanged;
     public System.Action OnDeath;
-
-    private AshSystem ashManager;
     
     private void Awake()
     {
@@ -44,11 +43,10 @@ public class EnemyHealth : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         enemyAI = GetComponent<EnemyAI>();
+        rbCollider = GetComponent<Collider2D>();
         
         currentHealth = maxHealth;
         originalColor = spriteRenderer.color;
-
-        ashManager = FindFirstObjectByType<AshSystem>();
     }
     
     private void Update()
@@ -128,7 +126,7 @@ public class EnemyHealth : MonoBehaviour
         }
       
         OnHealthChanged?.Invoke(currentHealth);
-        
+        Instantiate(ashPrefab, transform.position, Quaternion.identity);
        
         if (currentHealth <= 0)
         {
@@ -136,7 +134,6 @@ public class EnemyHealth : MonoBehaviour
             return true;
         }
         
- 
         
         return true;
     }
@@ -168,22 +165,22 @@ public class EnemyHealth : MonoBehaviour
         
       
     }
-    
+
     private void Die()
     {
-      
+
         if (animator != null)
         {
             animator.SetTrigger("Die");
         }
-        
-       
+
+
         if (enemyAI != null)
         {
             enemyAI.enabled = false;
         }
-        
-  
+
+
         if (rb != null)
         {
             rb.velocity = Vector2.zero;
@@ -194,7 +191,7 @@ public class EnemyHealth : MonoBehaviour
         {
             particles.spawn("ash");
         }
-        
+
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
         {
@@ -202,14 +199,17 @@ public class EnemyHealth : MonoBehaviour
         }
 
         Instantiate(ashPrefab);
-        //ashManager.addDeath();
-        
- 
+
         OnDeath?.Invoke();
-        
-        
-     
+
+
         Destroy(gameObject, 1f);
+
+        testAshSystem ashSystem = FindObjectOfType<testAshSystem>();
+        if (ashSystem != null)
+        {
+            ashSystem.EnemyKilled();
+        }
     }
     
     
@@ -232,26 +232,5 @@ public class EnemyHealth : MonoBehaviour
     {
         return isInvulnerable;
     }
-    
- 
-    private void OnDrawGizmosSelected()
-    {
-        
-        Vector3 healthBarPos = transform.position + Vector3.up * 1.5f;
-        float healthBarWidth = 1f;
-        float healthBarHeight = 0.2f;
-        
-      
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(healthBarPos, new Vector3(healthBarWidth, healthBarHeight, 0));
-        
-      
-        if (Application.isPlaying)
-        {
-            float healthPercent = (float)currentHealth / maxHealth;
-            Gizmos.color = Color.green;
-            Vector3 healthFillPos = healthBarPos - Vector3.right * (healthBarWidth * (1 - healthPercent) * 0.5f);
-            Gizmos.DrawCube(healthFillPos, new Vector3(healthBarWidth * healthPercent, healthBarHeight, 0));
-        }
-    }
+
 }
