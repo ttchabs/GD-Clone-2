@@ -165,22 +165,22 @@ public class EnemyHealth : MonoBehaviour
         
       
     }
-    
+
     private void Die()
     {
-      
+
         if (animator != null)
         {
             animator.SetTrigger("Die");
         }
-        
-       
+
+
         if (enemyAI != null)
         {
             enemyAI.enabled = false;
         }
-        
-  
+
+
         if (rb != null)
         {
             rb.velocity = Vector2.zero;
@@ -191,7 +191,7 @@ public class EnemyHealth : MonoBehaviour
         {
             particles.spawn("ash");
         }
-        
+
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
         {
@@ -199,11 +199,17 @@ public class EnemyHealth : MonoBehaviour
         }
 
         Instantiate(ashPrefab);
- 
+
         OnDeath?.Invoke();
-        
-     
+
+
         Destroy(gameObject, 1f);
+
+        testAshSystem ashSystem = FindObjectOfType<testAshSystem>();
+        if (ashSystem != null)
+        {
+            ashSystem.EnemyKilled();
+        }
     }
     
     

@@ -10,7 +10,7 @@ public class WeaponBehavior : MonoBehaviour
     [SerializeField] private float projectileSpeed = 15f;
     [SerializeField] private float projectileRange = 8f;
     [SerializeField] private float returnSpeed = 12f;
-    [SerializeField] private float maxFlightTime = 5f; 
+    [SerializeField] private float maxFlightTime = 5f; //  time before return
     [SerializeField] private float rotationSpeed = 720f; // degrees per second while flying
     
     [Header("Audio & Effects")]
@@ -20,9 +20,7 @@ public class WeaponBehavior : MonoBehaviour
     [SerializeField] private AudioClip axeHitSound;
     [SerializeField] private AudioClip scytheSwipeSound;
     [SerializeField] private ParticleSystem attackEffect;
-
-    //[Header("Damage Numbers")] [SerializeField]
-    //private int damage = 0;
+    
    
     private SpriteRenderer weaponSprite;
     private AudioSource audioSource;
@@ -30,15 +28,14 @@ public class WeaponBehavior : MonoBehaviour
     private Animator playerAnimator;
     private LayerMask enemyLayerMask;
     
- 
+  
     private bool isProjectileActive = false;
     private bool hasHitEnemy = false; 
-    private float flightTime = 0f; //  how long axe has been flying
+    private float flightTime = 0f; 
     private Vector3 idlePosition; 
     private Vector3 idleRotation; 
     
-
-    public enum WeaponType
+        public enum WeaponType
     {
         Sword = 1,
         Axe = 2,
@@ -58,20 +55,20 @@ public class WeaponBehavior : MonoBehaviour
             audioSource.playOnAwake = false;
         }
         
-
+       
         enemyLayerMask = LayerMask.GetMask("Enemy");
         
-        
+   
         CaptureInitialTransform();
     }
     
     private void CaptureInitialTransform()
     {
-     
+       
         idlePosition = transform.localPosition;
         idleRotation = transform.localEulerAngles;
         
-       
+        
     }
     
     private void SetIdleState()
@@ -81,26 +78,26 @@ public class WeaponBehavior : MonoBehaviour
         transform.localEulerAngles = idleRotation;
     }
     
-    
+ 
     public void OnEquipped()
     {
-     
+       
         CaptureInitialTransform();
         SetIdleState();
        
     }
     
-    
+ 
     public void OnUnequipped()
     {
         StopAttack();
-       
+      
     }
     
-  
+    //  when player attacks with this weapon
     public void OnAttack()
     {
-        if (isProjectileActive) return; 
+        if (isProjectileActive) return; // no't attack if axe is still flying
         
         switch (weaponType)
         {
@@ -136,154 +133,113 @@ public class WeaponBehavior : MonoBehaviour
             playerAnimator.SetTrigger("SwordAttack");
         }
         
-        Debug.Log("sword a attack triggered");
+        Debug.Log("Sword attack ");
     }
     
     private void TriggerAxeAttack()
     {
-       
+        //  axe projectile
         StartCoroutine(AxeProjectile());
         
-        
+        //  player animation
         if (playerAnimator != null)
         {
             playerAnimator.SetTrigger("AxeThrow");
         }
         
-        Debug.Log("axe throw ");
+  
     }
     
     private void TriggerScytheAttack()
     {
-     
+        // Play sound
         if (audioSource != null && scytheSwipeSound != null)
         {
             audioSource.PlayOneShot(scytheSwipeSound);
         }
         
-        
+        // Play effect
         if (attackEffect != null)
         {
             attackEffect.Play();
         }
         
-       
+        
         if (playerAnimator != null)
         {
             playerAnimator.SetTrigger("ScytheAttack");
         }
-
-        MeleeAttack();
-        Debug.Log("Scythe attack ");
+        
+        Debug.Log("Scythe attack triggered");
     }
-
-    private void MeleeAttack()
-    {
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 0.5f, enemyLayerMask);
-        int damage = 0;
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            var enemyHealth = enemy.GetComponent<EnemyHealth>();
-            if (enemyHealth != null)
-            {
-               
-                WeaponSystem weaponSystem = player?.GetComponent<WeaponSystem>();
-                switch (weaponType)
-                {
-                    case WeaponType.Scythe:
-                        damage = weaponSystem.GetCurrentWeapon().damage = 20;
-                        break;
-                    case WeaponType.Sword:
-                        damage = weaponSystem.GetCurrentWeapon().damage = 30;
-                        break;
-                }
-                
-                
-                Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
-                bool damageDealt = enemyHealth.TakeDamage(damage, attackDirection);
-                
-                if (damageDealt)
-                {
-                    if (audioSource != null && axeHitSound != null)
-                    {
-                        audioSource.PlayOneShot(axeHitSound);
-                    }
-                    
-                    hasHitEnemy = true;
-                    
-                    Debug.Log($"{weaponType} hit {enemy.name} for {damage} damage");
-                }
-            }
-        }
-    }
-
+    
     private IEnumerator AxeProjectile()
     {
         isProjectileActive = true;
         hasHitEnemy = false;
         flightTime = 0f;
         
-       
+        // Play throw sound
         if (audioSource != null && axeThrowSound != null)
         {
             audioSource.PlayOneShot(axeThrowSound);
         }
         
-      
+        // Find nearest enemy or use max range direction
         Vector3 targetPoint = GetAxeTargetPoint();
         
-        Vector3 startPos = transform.position; 
+        Vector3 startPos = transform.position; // World position for projectile
         Vector3 originalLocalPos = transform.localPosition;
         Vector3 originalLocalRot = transform.localEulerAngles;
         
-       
+        // Throw phase - continue until hit enemy, reach max distance, or max time (5 seconds)
         while (!hasHitEnemy && flightTime < maxFlightTime)
         {
             flightTime += Time.deltaTime;
             
-          
+            // Calculate progress based on speed and distance
             float distanceToTarget = Vector3.Distance(startPos, targetPoint);
             float expectedFlightTime = distanceToTarget / projectileSpeed;
             float progress = flightTime / expectedFlightTime;
             
-        
+            // If we've reached the target point and no enemy hit, continue flying for remaining time
             if (progress >= 1f)
             {
-             
+                // Continue flying in the same direction beyond target point
                 Vector3 direction = (targetPoint - startPos).normalized;
                 float extraDistance = (flightTime - expectedFlightTime) * projectileSpeed;
                 transform.position = targetPoint + direction * extraDistance;
             }
             else
             {
-               
+                // Still flying toward initial target
                 transform.position = Vector3.Lerp(startPos, targetPoint, progress);
             }
             
-          
+            // Rotate while flying (boomerang spin)
             transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
             
-       
+            // Check for enemy hits during flight
             CheckAxeEnemyHits();
             
             yield return null;
         }
         
-  
+        // Play return sound
         if (audioSource != null && axeReturnSound != null)
         {
             audioSource.PlayOneShot(axeReturnSound);
         }
         
-     
+        // Return phase - always returns to player regardless of hit or miss
         Vector3 returnStart = transform.position;
         float elapsedTime = 0f;
         
-        while (elapsedTime < 10f)
+        while (elapsedTime < 10f) // Safety timeout for return
         {
             elapsedTime += Time.deltaTime;
             
-          
+            // Update return target to player's current position (follows player movement)
             if (player != null)
             {
                 Vector3 returnTarget = player.position;
@@ -291,51 +247,46 @@ public class WeaponBehavior : MonoBehaviour
                 float returnDuration = distanceToPlayer / returnSpeed;
                 float returnProgress = elapsedTime / returnDuration;
                 
-              
+                // Move back to player
                 transform.position = Vector3.Lerp(returnStart, returnTarget, returnProgress);
                 
-             
+                // Continue rotating during return
                 transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
                 
-                //  check if close enough to player to "catch" the axe
+                // Check if close enough to player to "catch" the axe
                 if (Vector3.Distance(transform.position, returnTarget) < 0.5f)
                 {
                     break;
                 }
                 
-       
+                // Update return start position if needed for smooth following
                 if (returnProgress > 1f)
                 {
                     returnStart = transform.position;
                     elapsedTime = 0f;
                 }
             }
-
-            if (hasHitEnemy)
-            {
-                targetPoint = player.transform.position;
-            }
             
             yield return null;
         }
         
-      
+        // go bac to original local position and rotation
         transform.localPosition = originalLocalPos;
         transform.localEulerAngles = originalLocalRot;
         
         isProjectileActive = false;
         
-        
+       
     }
     
     private Vector3 GetAxeTargetPoint()
     {
-       
+        
         Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, projectileRange, enemyLayerMask);
         
         if (enemies.Length > 0)
         {
-          
+            // Find closest enemy
             float closestDistance = float.MaxValue;
             Vector3 closestEnemyPos = Vector3.zero;
             
@@ -352,7 +303,7 @@ public class WeaponBehavior : MonoBehaviour
             return closestEnemyPos;
         }
         
-       
+        // No enemies found, throw in the direction player is facing
         if (player != null)
         {
             Vector3 direction = player.GetComponent<SpriteRenderer>().flipX ? Vector3.left : Vector3.right;
@@ -364,7 +315,7 @@ public class WeaponBehavior : MonoBehaviour
     
     private void CheckAxeEnemyHits()
     {
-      
+        // Check for overlapping enemies and damage them
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, 0.5f, enemyLayerMask);
         
         foreach (Collider2D enemy in hitEnemies)
@@ -372,27 +323,26 @@ public class WeaponBehavior : MonoBehaviour
             var enemyHealth = enemy.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
             {
-               
+                // Get weapon damage from the weapon system
                 WeaponSystem weaponSystem = player?.GetComponent<WeaponSystem>();
-                int damage = weaponSystem.GetCurrentWeapon().damage = 15;
+                int damage = weaponSystem?.GetCurrentWeapon()?.damage ?? 15;
                 
                 Vector2 attackDirection = (enemy.transform.position - transform.position).normalized;
                 bool damageDealt = enemyHealth.TakeDamage(damage, attackDirection);
                 
                 if (damageDealt)
                 {
-                  
+                    //  hit sound
                     if (audioSource != null && axeHitSound != null)
                     {
                         audioSource.PlayOneShot(axeHitSound);
                     }
                     
-                 
+                
                     hasHitEnemy = true;
                     
-                    Debug.Log($"axe hit {enemy.name} for {damage} damage");
+                   
                 }
-                
             }
         }
     }
@@ -406,18 +356,14 @@ public class WeaponBehavior : MonoBehaviour
         SetIdleState();
     }
     
-
+    // Public getters
     public bool IsAttacking => isProjectileActive;
     public WeaponType GetWeaponType() => weaponType;
     
+    // Method to set weapon type (useful for dynamic assignment)
     public void SetWeaponType(WeaponType type)
     {
         weaponType = type;
         SetIdleState();
     }
-
-    // public int getDamage()
-    // {
-    //     return damage;
-    // }
 }
