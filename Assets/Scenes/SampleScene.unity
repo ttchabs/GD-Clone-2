@@ -87994,7 +87994,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ambientMusicSource: {fileID: 423528470}
   combatMusicSource: {fileID: 1695571247}
-  ambientMusic: {fileID: 0}
+  ambientMusic: {fileID: 8300000, guid: 5c21bc67ee5234a47893bd96668cf078, type: 3}
   combatMusic: {fileID: 8300000, guid: 6fc0d1125a15c9840823d9333d45f620, type: 3}
   fadeInDuration: 2
   fadeOutDuration: 3
