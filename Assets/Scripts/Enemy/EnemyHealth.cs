@@ -19,13 +19,19 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private Color damageColor = Color.red;
     [SerializeField] private ParticleSpawner particles;
     [SerializeField] private GameObject ashPrefab;
+    
+    [Header("Audio Effects")]
+    [SerializeField] private AudioClip explosionSound;
+    [SerializeField] private AudioClip damageSound;
+    [SerializeField] private float explosionVolume = 0.8f;
+    [SerializeField] private float damageVolume = 0.6f;
  
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private EnemyAI enemyAI;
+    private AudioSource audioSource;
     
-  
     private int currentHealth;
     private bool isInvulnerable;
     private float invulnerabilityTimer;
@@ -33,6 +39,7 @@ public class EnemyHealth : MonoBehaviour
     private float knockbackTimer;
     private Color originalColor;
     private Collider2D rbCollider;
+    private bool isDead = false;
 
     public System.Action<int> OnHealthChanged;
     public System.Action OnDeath;
@@ -44,6 +51,14 @@ public class EnemyHealth : MonoBehaviour
         animator = GetComponent<Animator>();
         enemyAI = GetComponent<EnemyAI>();
         rbCollider = GetComponent<Collider2D>();
+        audioSource = GetComponent<AudioSource>();
+        
+        // Setup audio source if not found
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+        }
         
         currentHealth = maxHealth;
         originalColor = spriteRenderer.color;
@@ -61,7 +76,6 @@ public class EnemyHealth : MonoBehaviour
         {
             invulnerabilityTimer -= Time.deltaTime;
             
-          
             float flashTimer = invulnerabilityTimer % (flashDuration * 2);
             bool shouldFlash = flashTimer < flashDuration;
             spriteRenderer.color = shouldFlash ? damageColor : originalColor;
@@ -84,7 +98,6 @@ public class EnemyHealth : MonoBehaviour
             {
                 isKnockedBack = false;
                 
-              
                 if (enemyAI != null)
                 {
                     enemyAI.enabled = true;
@@ -95,26 +108,35 @@ public class EnemyHealth : MonoBehaviour
     
     public bool TakeDamage(int damage, Vector2 attackDirection = default)
     {
-       
-        if (isInvulnerable)
+        if (isInvulnerable || isDead)
         {
             return false;
         }
         
-     
+        // Trigger combat music when enemy first takes damage
+        if (CombatMusicManager.Instance != null && !CombatMusicManager.Instance.IsInCombat())
+        {
+            CombatMusicManager.Instance.ForceStartCombat();
+        }
+        
         currentHealth = Mathf.Max(0, currentHealth - damage);
         
-       
         isInvulnerable = true;
         invulnerabilityTimer = invulnerabilityTime;
         
-        //  knockback
+        // Play damage sound
+        if (audioSource != null && damageSound != null)
+        {
+            audioSource.PlayOneShot(damageSound, damageVolume);
+        }
+        
+        // Apply knockback
         if (attackDirection != Vector2.zero)
         {
             ApplyKnockback(attackDirection);
         }
         
-        //  damage animation
+        // Trigger damage animation
         if (animator != null)
         {
             animator.SetTrigger("TakeDamage");
@@ -126,14 +148,18 @@ public class EnemyHealth : MonoBehaviour
         }
       
         OnHealthChanged?.Invoke(currentHealth);
-        Instantiate(ashPrefab, transform.position, Quaternion.identity);
+        
+        // Spawn ash when taking damage
+        if (ashPrefab != null)
+        {
+            Instantiate(ashPrefab, transform.position, Quaternion.identity);
+        }
        
         if (currentHealth <= 0)
         {
             Die();
             return true;
         }
-        
         
         return true;
     }
@@ -142,10 +168,8 @@ public class EnemyHealth : MonoBehaviour
     {
         if (rb == null) return;
         
-      
         Vector2 knockbackDirection = direction.normalized;
         rb.velocity = new Vector2(knockbackDirection.x * knockbackForce, rb.velocity.y);
-        
         
         if (enemyAI != null)
         {
@@ -162,24 +186,29 @@ public class EnemyHealth : MonoBehaviour
         
         currentHealth = Mathf.Min(maxHealth, currentHealth + healAmount);
         OnHealthChanged?.Invoke(currentHealth);
-        
-      
     }
 
     private void Die()
     {
+        if (isDead) return; // Prevent multiple death calls
+        
+        isDead = true;
+        
+        // Play explosion sound on death
+        if (audioSource != null && explosionSound != null)
+        {
+            audioSource.PlayOneShot(explosionSound, explosionVolume);
+        }
 
         if (animator != null)
         {
             animator.SetTrigger("Die");
         }
 
-
         if (enemyAI != null)
         {
             enemyAI.enabled = false;
         }
-
 
         if (rb != null)
         {
@@ -187,6 +216,7 @@ public class EnemyHealth : MonoBehaviour
             rb.isKinematic = true;
         }
 
+        // Spawn ash particles on death
         if (particles != null)
         {
             particles.spawn("ash");
@@ -198,20 +228,30 @@ public class EnemyHealth : MonoBehaviour
             col.enabled = false;
         }
 
-        Instantiate(ashPrefab);
+        // Spawn ash prefab on death
+        if (ashPrefab != null)
+        {
+            Instantiate(ashPrefab, transform.position, Quaternion.identity);
+        }
+
+        // Notify combat music manager that an enemy died
+        if (CombatMusicManager.Instance != null)
+        {
+            CombatMusicManager.Instance.OnEnemyDeath();
+        }
 
         OnDeath?.Invoke();
 
-
-        Destroy(gameObject, 1f);
-
+        // Notify ash system
         testAshSystem ashSystem = FindObjectOfType<testAshSystem>();
         if (ashSystem != null)
         {
             ashSystem.EnemyKilled();
         }
+
+        // Destroy after delay to allow sound to play
+        Destroy(gameObject, 1f);
     }
-    
     
     public int GetCurrentHealth()
     {
@@ -225,12 +265,11 @@ public class EnemyHealth : MonoBehaviour
     
     public bool IsAlive()
     {
-        return currentHealth > 0;
+        return currentHealth > 0 && !isDead;
     }
     
     public bool IsInvulnerable()
     {
         return isInvulnerable;
     }
-
 }
