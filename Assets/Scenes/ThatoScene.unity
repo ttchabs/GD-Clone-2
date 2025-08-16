@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 60526256}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.026287913, w: 0.9996544}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0000032782555, w: 1}
   m_LocalPosition: {x: 0.387, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -222,6 +222,10 @@ MonoBehaviour:
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   particles: {fileID: 0}
   ashPrefab: {fileID: 0}
+  explosionSound: {fileID: 0}
+  damageSound: {fileID: 0}
+  explosionVolume: 0.8
+  damageVolume: 0.6
 --- !u!114 &116021240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,7 +438,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 216279091}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.28404555, w: 0.95881087}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0000016391274, w: 1}
   m_LocalPosition: {x: 1.235, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1610,7 +1614,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1383687608}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.063271336, w: 0.99799645}
+  m_LocalRotation: {x: -0, y: -0, z: 0.0000011622903, w: 1}
   m_LocalPosition: {x: 0.532, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
