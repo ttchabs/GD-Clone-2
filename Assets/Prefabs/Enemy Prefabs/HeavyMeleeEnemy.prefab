@@ -1,5 +1,72 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &53221826706588371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1261288444561860665}
+  - component: {fileID: 8491547091759418474}
+  m_Layer: 3
+  m_Name: weaponCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1261288444561860665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 53221826706588371}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.298, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2833457031008279989}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &8491547091759418474
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 53221826706588371}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0028147418, y: 0.16888823}
+  m_Size: {x: 0.3029644, y: 1.067555}
+  m_Direction: 0
 --- !u!1 &239913167021718588
 GameObject:
   m_ObjectHideFlags: 0
@@ -61,6 +128,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6276313436650334194}
+  - {fileID: 1261288444561860665}
   m_Father: {fileID: 8236197824547882466}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1423764907778521270
@@ -191,12 +259,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb218ee552747d439e81a3c72b2e81f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRanged: 0
   projectilePrefab: {fileID: 0}
   firePoint: {fileID: 0}
   projectileSpeed: 0
   projectileLifetime: 0.2
   projectileDamage: 10
   targetingRange: 2
+  meleeTime: 0.3
+  meleeDamage: 0
+  meleeCollider: {fileID: 0}
   muzzleFlash: {fileID: 0}
   muzzleFlashDuration: 0.1
 --- !u!1 &5893961656573763832
@@ -434,12 +506,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb218ee552747d439e81a3c72b2e81f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRanged: 1
   projectilePrefab: {fileID: 4412860930724851946, guid: ef80863a05f594a4e8c32944f95d1d34, type: 3}
   firePoint: {fileID: 1848324374194500139}
   projectileSpeed: 5
   projectileLifetime: 3
   projectileDamage: 10
   targetingRange: 4
+  meleeTime: 0.3
+  meleeDamage: 3
+  meleeCollider: {fileID: 8491547091759418474}
   muzzleFlash: {fileID: 0}
   muzzleFlashDuration: 0.1
 --- !u!95 &7508064202313805020
