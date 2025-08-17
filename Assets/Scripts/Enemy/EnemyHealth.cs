@@ -249,6 +249,7 @@ public class EnemyHealth : MonoBehaviour
         {
             ashSystem.EnemyKilled();
         }
+        fogWallManager.Instance.EnemyDefeated();
 
         // Destroy after delay to allow sound to play
         Destroy(gameObject, 1f);
