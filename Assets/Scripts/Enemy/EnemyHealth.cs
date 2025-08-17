@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ public class EnemyHealth : MonoBehaviour
     [Header("Visual Feedback")]
     [SerializeField] private float flashDuration = 0.1f;
     [SerializeField] private Color damageColor = Color.red;
-    [SerializeField] private ParticleSpawner particles;
+    [SerializeField] [NotNull] private ParticleSpawner1 particles;
     [SerializeField] private GameObject ashPrefab;
     
     [Header("Audio Effects")]

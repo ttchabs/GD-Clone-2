@@ -6,13 +6,16 @@ using UnityEngine.SceneManagement;
 public class KillBox : MonoBehaviour
 {
     // public Transform respawnPoint;
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.gameObject.tag =="Player")
+        if (collision.CompareTag("Player"))
         {
-            Debug.Log("Player has entered the kill box");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
+            RespawnPlayer respawnPlayer = collision.GetComponent<RespawnPlayer>();
+            if (respawnPlayer != null)
+            {
+                Debug.Log("Player died, respawning...");
+                respawnPlayer.Respawn();
+            }
         }
     }
 }

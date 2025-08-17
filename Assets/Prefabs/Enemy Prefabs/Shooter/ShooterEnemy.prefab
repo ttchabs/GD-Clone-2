@@ -39,7 +39,7 @@ Transform:
   - {fileID: 8183313663651395741}
   - {fileID: 4066400371788142679}
   - {fileID: 5642405417855320107}
-  - {fileID: 5668343508352213281}
+  - {fileID: 2404742431010534750}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2128332776002441379
@@ -191,8 +191,12 @@ MonoBehaviour:
   knockbackDuration: 0.2
   flashDuration: 0.1
   damageColor: {r: 1, g: 0, b: 0, a: 1}
-  particles: {fileID: 683409561556470065}
+  particles: {fileID: 3481285223657349247}
   ashPrefab: {fileID: 6321718314102759470, guid: f2993b1500bac614fa2477be8e3813f3, type: 3}
+  explosionSound: {fileID: 0}
+  damageSound: {fileID: 0}
+  explosionVolume: 0.8
+  damageVolume: 0.6
 --- !u!50 &3337080031014611316
 Rigidbody2D:
   serializedVersion: 4
@@ -305,60 +309,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb218ee552747d439e81a3c72b2e81f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
-  firePoint: {fileID: 0}
+  projectilePrefab: {fileID: 4412860930724851946, guid: ef80863a05f594a4e8c32944f95d1d34, type: 3}
+  firePoint: {fileID: 3320102720292448396}
   projectileSpeed: 0
   projectileLifetime: 0.2
   projectileDamage: 10
   targetingRange: 2
   muzzleFlash: {fileID: 0}
   muzzleFlashDuration: 0.1
---- !u!1 &3122990695543986358
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5668343508352213281}
-  - component: {fileID: 683409561556470065}
-  m_Layer: 0
-  m_Name: ParticleHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5668343508352213281
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3122990695543986358}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2113331, z: 0}
-  m_LocalScale: {x: 0.58823526, y: 0.58823526, z: 0.58823526}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3320102720292448396}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &683409561556470065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3122990695543986358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81fe359ecf9f71e4abb2cfd124df620d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  blood: {fileID: 2788541164476624464, guid: efc62eabdd25a6641a604c7650cbd44d, type: 3}
-  ash: {fileID: 2788541164476624464, guid: a1e2e027fb4288e4ba4786d2f8ef001c, type: 3}
 --- !u!1 &4636375808901589893
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,3 +379,76 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3320102720292448396}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &3435927463644683733
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3320102720292448396}
+    m_Modifications:
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.2113331
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2296695687560152821, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+      propertyPath: m_Name
+      value: ParticleHandler
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+--- !u!4 &2404742431010534750 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1076783978867714187, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+  m_PrefabInstance: {fileID: 3435927463644683733}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3481285223657349247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2305525962066197930, guid: ca81bb319c0e58f4e98d646d6713d594, type: 3}
+  m_PrefabInstance: {fileID: 3435927463644683733}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81fe359ecf9f71e4abb2cfd124df620d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
