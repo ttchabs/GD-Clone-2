@@ -7,16 +7,17 @@ public class KillBox : MonoBehaviour
 {
     // public Transform respawnPoint;
     public GameObject youDiedUI;
-
+    public float displayTime = 2f; 
     public void Start()
-    { 
-            youDiedUI.SetActive(false);
+    {
+        youDiedUI.SetActive(false);
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            youDiedUI.SetActive(true);
+            StartCoroutine(ShowAndHide());
+
             // RespawnPlayer respawnPlayer = collision.GetComponent<RespawnPlayer>();
             // if (respawnPlayer != null)
             // {
@@ -25,5 +26,12 @@ public class KillBox : MonoBehaviour
             //     respawnPlayer.Respawn();
             // }
         }
+    }
+    
+    private IEnumerator ShowAndHide()
+    {
+        youDiedUI.SetActive(true);
+        yield return new WaitForSeconds(displayTime);
+        youDiedUI.SetActive(false);
     }
 }

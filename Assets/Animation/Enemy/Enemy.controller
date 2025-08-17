@@ -36,6 +36,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: ComboStep
     m_EventTreshold: 2
+  - m_ConditionMode: 1
+    m_ConditionEvent: Melee
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5192559277942236439}
   m_Solo: 0
@@ -170,6 +173,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: ComboStep
     m_EventTreshold: 3
+  - m_ConditionMode: 1
+    m_ConditionEvent: Melee
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6236779338839219148}
   m_Solo: 0
@@ -198,6 +204,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 6
     m_ConditionEvent: ComboStep
     m_EventTreshold: 1
+  - m_ConditionMode: 1
+    m_ConditionEvent: Melee
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3344370703529704563}
   m_Solo: 0
@@ -229,6 +238,12 @@ AnimatorController:
     m_Controller: {fileID: 0}
   - m_Name: ComboStep
     m_Type: 3
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
+  - m_Name: Melee
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0

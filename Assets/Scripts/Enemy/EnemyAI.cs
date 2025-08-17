@@ -222,6 +222,10 @@ public class EnemyAI : MonoBehaviour
     
     private void HandleReturning()
     {
+        // if (animator != null)
+        // {
+        //     animator.SetTrigger("Attack");
+        // }
         float distanceToA = Vector2.Distance(transform.position, pointA.position);
         float distanceToB = Vector2.Distance(transform.position, pointB.position);
         //if (this.transform.position.x < pointA.position.x || this.transform.position.x > pointB.position.x)
@@ -282,9 +286,14 @@ private void HandleAttacking()
     {
         if (animator != null)
         {
-                animator.SetTrigger("Melee");
+            animator.SetTrigger("Melee");
+            animator.SetTrigger("Attack");
         }
         
+        if (attack != null && attack.CanFire())
+        {
+            StartCoroutine(attack.MeleeActiveTime(attack.meleeTime));
+        }
     }
 
     attackCooldownTime = attackCooldown; // reset cooldown
