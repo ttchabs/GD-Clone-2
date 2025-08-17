@@ -7431,6 +7431,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   youDiedUI: {fileID: 1663718768}
   displayTime: 2
+--- !u!4 &568286628 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7026450197471472099, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+  m_PrefabInstance: {fileID: 1246941538}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &575287364
 GameObject:
   m_ObjectHideFlags: 0
@@ -16046,6 +16051,14 @@ PrefabInstance:
       propertyPath: availableWeapons.Array.data[2].weaponPrefab
       value: 
       objectReference: {fileID: 8356086557656947373, guid: 4a0a4be2175c4404a8dd33a4d2bb8d55, type: 3}
+    - target: {fileID: 2511823154031403387, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0000014826655
+      objectReference: {fileID: 0}
+    - target: {fileID: 2555522238114710506, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0000010430812
+      objectReference: {fileID: 0}
     - target: {fileID: 2808163169318231414, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.9
@@ -16086,6 +16099,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2993966179684012929, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.10737792
+      objectReference: {fileID: 0}
+    - target: {fileID: 2993966179684012929, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.9942183
+      objectReference: {fileID: 0}
     - target: {fileID: 4231978307819028490, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_Name
       value: Player (1)
@@ -16093,6 +16114,10 @@ PrefabInstance:
     - target: {fileID: 4712169830712159221, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712169830712159221, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5379983966900648126, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: staminaUI
@@ -16115,6 +16140,10 @@ PrefabInstance:
       value: 0.15686275
       objectReference: {fileID: 0}
     - target: {fileID: 6259722591299731656, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: GrimReaper
+      value: 
+      objectReference: {fileID: 568286628}
+    - target: {fileID: 6259722591299731656, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: slashSound
       value: 
       objectReference: {fileID: 8300000, guid: a8a4cabe6c3e424439dff38250b5c687, type: 3}
@@ -16129,6 +16158,22 @@ PrefabInstance:
     - target: {fileID: 6475634194649327566, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_GravityScale
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7782617377384222802, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.00000092387177
+      objectReference: {fileID: 0}
+    - target: {fileID: 8514054835887946781, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.038468223
+      objectReference: {fileID: 0}
+    - target: {fileID: 9076930997387548433, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.12354445
+      objectReference: {fileID: 0}
+    - target: {fileID: 9076930997387548433, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.992339
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -58844,6 +58889,8 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   slashSound: {fileID: 0}
   slashTrail: {fileID: 0}
+  animator: {fileID: 0}
+  GrimReaper: {fileID: 0}
 --- !u!212 &1636830166
 SpriteRenderer:
   m_ObjectHideFlags: 0

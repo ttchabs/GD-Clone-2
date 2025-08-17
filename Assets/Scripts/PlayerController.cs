@@ -45,10 +45,11 @@ public class PlayerController : MonoBehaviour
     
     // Components
     private Rigidbody2D rb;
-    private Animator animator;
+    public Animator animator;
     private SpriteRenderer spriteRenderer;
     private WeaponSystem weaponSystem;
     private StaminaSystem staminaSystem;
+    public Transform GrimReaper; //actual one with animations
     
     // Input variables
     private Vector2 moveInput;
@@ -96,7 +97,7 @@ public class PlayerController : MonoBehaviour
 
         // Get components
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+       // animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         weaponSystem = GetComponent<WeaponSystem>();
         staminaSystem = GetComponent<StaminaSystem>();
@@ -296,6 +297,7 @@ public class PlayerController : MonoBehaviour
         }
         
         rb.velocity = new Vector2(targetVelocity, rb.velocity.y);
+       //
         
         if (!isAttacking)
         {
@@ -308,17 +310,27 @@ public class PlayerController : MonoBehaviour
                 Flip();
             }
         }
+
+        if (moveInput.x > 0.1f && isGrounded)
+        {
+            animator.SetBool("IsWalking", true);
+        }
+
+        else if(moveInput.x <0.1f && isGrounded)
+        {
+            animator.SetBool("IsWalking", false);
+        }
     }
     
     private void Flip()
     {
         facingRight = !facingRight;
         spriteRenderer.flipX = !facingRight;
-        
-        Vector3 attackPos = attackPoint.localPosition;
-        attackPos.x *= -1;
-        attackPoint.localPosition = attackPos;
-        
+
+        Vector3 scale = GrimReaper.localScale;
+        scale.x *= -1;
+        GrimReaper.localScale = scale;
+
         // Flip weapons when player changes direction
         if (weaponSystem != null)
         {
@@ -397,6 +409,7 @@ public class PlayerController : MonoBehaviour
             if (isGrounded || coyoteTimeCounter > 0)
             {
                 PerformRegularJump();
+                animator.SetTrigger("Jump");
             }
             else if (isTouchingWall && !isGrounded)
             {
