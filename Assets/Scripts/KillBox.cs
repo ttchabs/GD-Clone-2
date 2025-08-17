@@ -6,16 +6,24 @@ using UnityEngine.SceneManagement;
 public class KillBox : MonoBehaviour
 {
     // public Transform respawnPoint;
+    public GameObject youDiedUI;
+
+    public void Start()
+    { 
+            youDiedUI.SetActive(false);
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            RespawnPlayer respawnPlayer = collision.GetComponent<RespawnPlayer>();
-            if (respawnPlayer != null)
-            {
-                Debug.Log("Player died, respawning...");
-                respawnPlayer.Respawn();
-            }
+            youDiedUI.SetActive(true);
+            // RespawnPlayer respawnPlayer = collision.GetComponent<RespawnPlayer>();
+            // if (respawnPlayer != null)
+            // {
+            //     youDiedUI.SetActive(true);
+            //     Debug.Log("Player died, respawning...");
+            //     respawnPlayer.Respawn();
+            // }
         }
     }
 }
