@@ -333,10 +333,10 @@ public class PlayerController : MonoBehaviour
         GrimReaper.localScale = scale;
 
         // Flip weapons when player changes direction
-        if (weaponSystem != null)
-        {
-            weaponSystem.FlipWeapons(facingRight);
-        }
+        //if (weaponSystem != null)
+        //{
+        //    weaponSystem.FlipWeapons(facingRight);
+        //}
     }
     
     #endregion
