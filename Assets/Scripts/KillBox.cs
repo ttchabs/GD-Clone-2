@@ -7,9 +7,10 @@ public class KillBox : MonoBehaviour
 {
     // public Transform respawnPoint;
     public GameObject youDiedUI;
-    public float displayTime = 2f; 
+    public float displayTime = 0.2f; 
     public void Start()
     {
+
         youDiedUI.SetActive(false);
     }
     void OnTriggerEnter2D(Collider2D collision)
@@ -17,14 +18,15 @@ public class KillBox : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             StartCoroutine(ShowAndHide());
+            
 
-            // RespawnPlayer respawnPlayer = collision.GetComponent<RespawnPlayer>();
-            // if (respawnPlayer != null)
-            // {
-            //     youDiedUI.SetActive(true);
-            //     Debug.Log("Player died, respawning...");
-            //     respawnPlayer.Respawn();
-            // }
+            RespawnPlayer respawnPlayer = collision.GetComponent<RespawnPlayer>();
+            if (respawnPlayer != null)
+            {
+                youDiedUI.SetActive(true);
+                Debug.Log("Player died, respawning...");
+                respawnPlayer.Respawn();
+            }
         }
     }
     
