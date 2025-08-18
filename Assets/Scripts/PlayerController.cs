@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
     private bool isTouchingWallRight;
     private bool isTouchingWall;
     private bool isWallSliding;
+    public bool isflipped;
     
     // Combo system variables
     private ComboState currentCombo = ComboState.None;
@@ -323,7 +324,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    private void Flip()
+    public void Flip()
     {
         
         facingRight = !facingRight;
@@ -331,6 +332,7 @@ public class PlayerController : MonoBehaviour
     Vector3 scale = transform.localScale;
     scale.x *= -1;
     transform.localScale = scale;
+        isflipped = true;
 
     if (GrimReaper != null)
     {
