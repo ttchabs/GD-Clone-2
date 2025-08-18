@@ -92,8 +92,7 @@ Transform:
   m_LocalPosition: {x: 0.67, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7330007200353700092}
+  m_Children: []
   m_Father: {fileID: 2808163169318231414}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2196981488314726818
@@ -396,6 +395,7 @@ MonoBehaviour:
   slashSound: {fileID: 0}
   slashTrail: {fileID: 0}
   animator: {fileID: 176868272271374134}
+  GrimReaper: {fileID: 0}
 --- !u!70 &1081846588209072064
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -578,6 +578,7 @@ GameObject:
   - component: {fileID: 7330007200353700092}
   - component: {fileID: 1462197407021654836}
   - component: {fileID: 4884110881304812756}
+  - component: {fileID: 7799639626350013586}
   m_Layer: 0
   m_Name: fakesword
   m_TagString: Untagged
@@ -593,12 +594,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4712169830712159221}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0057, y: 0.6951, z: 0}
-  m_LocalScale: {x: 0.3015383, y: 2.390234, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.61637187, w: 0.78745526}
+  m_LocalPosition: {x: -0.71696234, y: 1.0741324, z: 0}
+  m_LocalScale: {x: 0.30153823, y: 2.3902335, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8977136459573314510}
+  m_Father: {fileID: 8534321940567979971}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1462197407021654836
 SpriteRenderer:
@@ -681,7 +682,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -703,6 +704,30 @@ PolygonCollider2D:
       - {x: 0.43359375, y: 0.25}
       - {x: 0, y: 0.5}
   m_UseDelaunayMesh: 0
+--- !u!114 &7799639626350013586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712169830712159221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eccc7cdabfdce14abb70549186c88c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponType: 1
+  projectileSpeed: 15
+  projectileRange: 8
+  returnSpeed: 12
+  maxFlightTime: 5
+  rotationSpeed: 720
+  swordSlashSound: {fileID: 0}
+  axeThrowSound: {fileID: 0}
+  axeReturnSound: {fileID: 0}
+  axeHitSound: {fileID: 0}
+  scytheSwipeSound: {fileID: 0}
+  attackEffect: {fileID: 0}
 --- !u!1 &5765131386147773914
 GameObject:
   m_ObjectHideFlags: 0
@@ -1040,7 +1065,8 @@ Transform:
   m_LocalPosition: {x: 0.14, y: -0.03, z: 0}
   m_LocalScale: {x: 2.6315794, y: 2.6315794, z: 2.6315792}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7330007200353700092}
   m_Father: {fileID: 2008808956271080576}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 6.699}
 --- !u!1 &7375061791497616089

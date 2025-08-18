@@ -16693,7 +16693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4712169830712159221, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5379983966900648126, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: staminaUI
@@ -16798,6 +16798,10 @@ PrefabInstance:
     - target: {fileID: 6573795407080792935, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_ShapePath.Array.data[6].y
       value: 1.4663852
+      objectReference: {fileID: 0}
+    - target: {fileID: 7375061791497616089, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7782617377384222802, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_LocalRotation.z
