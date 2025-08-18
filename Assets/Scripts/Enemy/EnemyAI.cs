@@ -34,8 +34,7 @@ public class EnemyAI : MonoBehaviour
     
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
-    public Animator animator;
-   // public Transform ActualEnemy; //to flip the enmemy out the window
+    private Animator animator;
     
  
     private EnemyState currentState;
@@ -66,7 +65,7 @@ public class EnemyAI : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-      //  animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         attackTargetingRange = attack.targetingRange;
         
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -280,7 +279,6 @@ private void HandleAttacking()
         if (attack != null && attack.CanFire())
         {
             StartCoroutine(attack.Fire(directionToPlayer));
-                animator.SetTrigger("Shoot");
         }
     }
     
@@ -339,7 +337,7 @@ private void HandleAttacking()
         
         float direction = Mathf.Sign(targetPosition.x - transform.position.x);
         
-        if (CanMove(direction) && CompareTag("Shooter"))
+        if (CanMove(direction))
         {
             rb.velocity = new Vector2(direction * moveSpeed, rb.velocity.y);
             FaceDirection(direction);
@@ -353,16 +351,6 @@ private void HandleAttacking()
                 SetState(EnemyState.Waiting);
                 waitTimer = waitTime;
             }
-        }
-
-        if(MathF.Abs(rb.velocity.x) > 0.1f && CompareTag("Shooter"))
-                {
-            animator.SetBool("IsWalking", true);
-        }
-
-        else if (MathF.Abs(rb.velocity.x ) > 0.1f && CompareTag("Shooter"))
-        {
-            animator.SetBool("IsWalking", false);
         }
     }
     
@@ -427,10 +415,7 @@ private void HandleAttacking()
         facingRight = !facingRight;
         spriteRenderer.flipX = !facingRight;
 
-        Vector3 scale = transform.localScale;
-        scale.x *= -1;
-        transform.localScale = scale;
-
+      
     }
     
     private void UpdateEdgeCheckPosition()
