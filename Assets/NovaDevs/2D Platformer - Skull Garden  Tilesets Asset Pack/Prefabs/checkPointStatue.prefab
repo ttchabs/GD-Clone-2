@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2785156749648579761}
   - component: {fileID: 1979622816039506120}
   - component: {fileID: 7176485194457372613}
-  - component: {fileID: 7085995526556378910}
+  - component: {fileID: 298188040183313141}
   m_Layer: 0
   m_Name: checkPointStatue
   m_TagString: Untagged
@@ -144,7 +144,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7085995526556378910
+--- !u!114 &298188040183313141
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,6 +153,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6021725756038015497}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f73ce5e745c9364f8d670fb8b649b5e, type: 3}
+  m_Script: {fileID: 11500000, guid: f661d212df80cc247ba8898d6584bd0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
