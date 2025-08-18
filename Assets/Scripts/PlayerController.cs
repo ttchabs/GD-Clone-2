@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip slashSound;
     [SerializeField] private ParticleSystem slashTrail;
+    [SerializeField] private Transform spotlight; 
     
     // Components
     private Rigidbody2D rb;
@@ -324,12 +325,26 @@ public class PlayerController : MonoBehaviour
     
     private void Flip()
     {
+        
         facingRight = !facingRight;
-        spriteRenderer.flipX = !facingRight;
 
-        Vector3 scale = GrimReaper.localScale;
-        scale.x *= -1;
-        GrimReaper.localScale = scale;
+    Vector3 scale = transform.localScale;
+    scale.x *= -1;
+    transform.localScale = scale;
+
+    if (GrimReaper != null)
+    {
+        Vector3 grimScale = GrimReaper.localScale;
+        grimScale.x = Mathf.Abs(grimScale.x); // make sure it stays positive
+        GrimReaper.localScale = grimScale;
+    }
+
+    if (spotlight != null)
+    {
+        Vector3 lightScale = spotlight.localScale;
+        lightScale.x *= 1; // undo flip
+        spotlight.localScale = lightScale;
+    }
 
         // Flip weapons when player changes direction
         if (weaponSystem != null)

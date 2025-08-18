@@ -20503,6 +20503,10 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6259722591299731656, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: spotlight
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6259722591299731656, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: GrimReaper
       value: 
       objectReference: {fileID: 568286628}
@@ -66025,6 +66029,7 @@ MonoBehaviour:
   audioSource: {fileID: 0}
   slashSound: {fileID: 0}
   slashTrail: {fileID: 0}
+  spotlight: {fileID: 0}
   animator: {fileID: 0}
   GrimReaper: {fileID: 0}
 --- !u!212 &1636830166
