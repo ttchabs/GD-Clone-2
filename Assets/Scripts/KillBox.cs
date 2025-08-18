@@ -10,7 +10,6 @@ public class KillBox : MonoBehaviour
     public float displayTime = 0.2f; 
     public void Start()
     {
-
         youDiedUI.SetActive(false);
     }
     void OnTriggerEnter2D(Collider2D collision)
