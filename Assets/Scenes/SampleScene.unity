@@ -14401,6 +14401,11 @@ PrefabInstance:
       addedObject: {fileID: 1010738639}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b2999c4dba2bc549b45c39d4872b6ef, type: 3}
+--- !u!1 &917480165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3038495274870128748, guid: 4b2999c4dba2bc549b45c39d4872b6ef, type: 3}
+  m_PrefabInstance: {fileID: 917480164}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &920662878
 GameObject:
   m_ObjectHideFlags: 0
@@ -20347,10 +20352,14 @@ PrefabInstance:
       objectReference: {fileID: 429822814}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[0].damage
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[1].damage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: availableWeapons.Array.data[2].damage
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
@@ -20368,35 +20377,39 @@ PrefabInstance:
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[0].weaponIcon
       value: 
-      objectReference: {fileID: 21300000, guid: f3ce695af1f617a40abdaa9803992111, type: 3}
+      objectReference: {fileID: 21300000, guid: f60850830d2cfaa4aa00c3b31fd35e16, type: 3}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[0].weaponName
-      value: Sword
+      value: Long Sword
       objectReference: {fileID: 0}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[1].weaponIcon
       value: 
-      objectReference: {fileID: 21300000, guid: f8548cc5a28745844bb470907129d669, type: 3}
+      objectReference: {fileID: 21300000, guid: f3ce695af1f617a40abdaa9803992111, type: 3}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[1].weaponName
-      value: Axe
+      value: Sword
       objectReference: {fileID: 0}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[2].weaponIcon
       value: 
-      objectReference: {fileID: 21300000, guid: f60850830d2cfaa4aa00c3b31fd35e16, type: 3}
+      objectReference: {fileID: 21300000, guid: f8548cc5a28745844bb470907129d669, type: 3}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[2].weaponName
-      value: Long Sword
+      value: Axe
       objectReference: {fileID: 0}
+    - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: availableWeapons.Array.data[0].weaponPrefab
+      value: 
+      objectReference: {fileID: 8356086557656947373, guid: 4a0a4be2175c4404a8dd33a4d2bb8d55, type: 3}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[1].weaponPrefab
       value: 
-      objectReference: {fileID: 3038495274870128748, guid: 4b2999c4dba2bc549b45c39d4872b6ef, type: 3}
+      objectReference: {fileID: 917480165}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: availableWeapons.Array.data[2].weaponPrefab
       value: 
-      objectReference: {fileID: 8356086557656947373, guid: 4a0a4be2175c4404a8dd33a4d2bb8d55, type: 3}
+      objectReference: {fileID: 3038495274870128748, guid: 4b2999c4dba2bc549b45c39d4872b6ef, type: 3}
     - target: {fileID: 2511823154031403387, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.00002261996
