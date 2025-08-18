@@ -311,14 +311,15 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (moveInput.x > 0.1f && isGrounded)
+        if (Mathf.Abs(rb.velocity.x) > 0.1f && isGrounded) 
         {
             animator.SetBool("IsWalking", true);
         }
 
-        else if(moveInput.x <0.1f && isGrounded)
+        else if (Mathf.Abs(rb.velocity.x) < 0.1f && isGrounded)
         {
             animator.SetBool("IsWalking", false);
+            
         }
     }
     
@@ -332,10 +333,10 @@ public class PlayerController : MonoBehaviour
         GrimReaper.localScale = scale;
 
         // Flip weapons when player changes direction
-        if (weaponSystem != null)
-        {
-            weaponSystem.FlipWeapons(facingRight);
-        }
+        //if (weaponSystem != null)
+        //{
+        //    weaponSystem.FlipWeapons(facingRight);
+        //}
     }
     
     #endregion
