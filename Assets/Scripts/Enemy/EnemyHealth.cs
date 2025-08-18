@@ -151,10 +151,10 @@ public class EnemyHealth : MonoBehaviour
         OnHealthChanged?.Invoke(currentHealth);
         
         // Spawn ash when taking damage
-        if (ashPrefab != null)
-        {
-            Instantiate(ashPrefab, transform.position, Quaternion.identity);
-        }
+        // if (ashPrefab != null)
+        // {
+        //     Instantiate(ashPrefab, transform.position, Quaternion.identity);
+        // }
        
         if (currentHealth <= 0)
         {
@@ -244,15 +244,17 @@ public class EnemyHealth : MonoBehaviour
         OnDeath?.Invoke();
 
         // Notify ash system
-        testAshSystem ashSystem = FindObjectOfType<testAshSystem>();
-        if (ashSystem != null)
-        {
-            ashSystem.EnemyKilled();
-        }
-        fogWallManager.Instance.EnemyDefeated();
+        //testAshSystem ashSystem = FindObjectOfType<testAshSystem>();
+        // if (ashSystem != null)
+        // {
+        //     ashSystem.EnemyKilled();
+        // }
+        //fogWallManager.Instance.EnemyDefeated();
 
         // Destroy after delay to allow sound to play
-        Destroy(gameObject, 1f);
+        Destroy(gameObject, 0.5f);
+        gameObject.SetActive(false);
+        fogWallManager.Instance.EnemyDefeated();
     }
     
     public int GetCurrentHealth()
