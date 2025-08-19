@@ -32,7 +32,11 @@ public class EnemyAI : MonoBehaviour
     [Header("Attack Parameters")] 
     [SerializeField] private AttackScript attack;
     [SerializeField] private float attackCooldown;
-    
+
+    [Header("Attack Ranges")]
+    [SerializeField] private float meleeAttackRange = 1.5f;
+    [SerializeField] private float shooterAttackRange = 5f;
+
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
     public Animator animator;
@@ -131,60 +135,80 @@ public class EnemyAI : MonoBehaviour
     {
         HandleMovement();
     }
-    
+
+    private float GetAttackRange()
+    {
+        if (CompareTag("Melee")) return meleeAttackRange;
+        if (CompareTag("Shooter")) return shooterAttackRange;
+        return attackTargetingRange; // fallback
+    }
+
     private void UpdateState()
     {
+        if (player == null) return;
+
         float distanceToPlayer = GetHorizontalDistanceToPlayer();
-        
+
         switch (currentState)
         {
             case EnemyState.Patrolling:
                 HandlePatrolling();
-                
-                if (player != null && distanceToPlayer <= chaseRange && chaseRange > attackTargetingRange)
-                {
-                    SetState(EnemyState.Chasing);
-                    lastKnownPlayerPosition = player.position;
-                }
-                
-                if (player != null && distanceToPlayer < attackTargetingRange && chaseRange < attackTargetingRange)
+                if (distanceToPlayer <= GetAttackRange())
                 {
                     SetState(EnemyState.Attacking);
                 }
+                else if (distanceToPlayer <= chaseRange)
+                {
+                    SetState(EnemyState.Chasing);
+                }
                 break;
-                
+
             case EnemyState.Waiting:
                 HandleWaiting();
-                
-                if (player != null && distanceToPlayer <= chaseRange)
+                if (distanceToPlayer <= GetAttackRange())
+                {
+                    SetState(EnemyState.Attacking);
+                }
+                else if (distanceToPlayer <= chaseRange)
                 {
                     SetState(EnemyState.Chasing);
-                    lastKnownPlayerPosition = player.position;
-                }
-                if (player != null && distanceToPlayer < attackTargetingRange && chaseRange < attackTargetingRange)
-                {
-                    SetState(EnemyState.Attacking);
                 }
                 break;
-                
+
             case EnemyState.Chasing:
                 HandleChasing();
-                if (player != null && distanceToPlayer < attackTargetingRange)
+                if (distanceToPlayer <= GetAttackRange())
                 {
                     SetState(EnemyState.Attacking);
                 }
-                if (player == null || distanceToPlayer > losePlayerRange)
+                else if (distanceToPlayer > losePlayerRange)
                 {
                     SetState(EnemyState.Returning);
                 }
                 break;
-                
-            case EnemyState.Returning:
-                HandleReturning();
-                break;
-            
+
             case EnemyState.Attacking:
                 HandleAttacking();
+                if (distanceToPlayer > attackTargetingRange && distanceToPlayer <= chaseRange)
+                {
+                    SetState(EnemyState.Chasing);
+                }
+                else if (distanceToPlayer > losePlayerRange)
+                {
+                    SetState(EnemyState.Returning);
+                }
+                break;
+
+            case EnemyState.Returning:
+                HandleReturning();
+                if (distanceToPlayer <= GetAttackRange())
+                {
+                    SetState(EnemyState.Attacking);
+                }
+                else if (distanceToPlayer <= chaseRange)
+                {
+                    SetState(EnemyState.Chasing);
+                }
                 break;
         }
     }

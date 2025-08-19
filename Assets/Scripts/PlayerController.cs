@@ -313,14 +313,16 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (moveInput.x > 0.1f && isGrounded)
+        if (!isAttacking) // <-- stop walk anim updates during attack
         {
-            animator.SetBool("IsWalking", true);
-        }
-
-        else if(moveInput.x <0.1f && isGrounded)
-        {
-            animator.SetBool("IsWalking", false);
+            if (Mathf.Abs(rb.velocity.x) > 0.1f && isGrounded)
+            {
+                animator.SetBool("IsWalking", true);
+            }
+            else
+            {
+                animator.SetBool("IsWalking", false);
+            }
         }
     }
     
