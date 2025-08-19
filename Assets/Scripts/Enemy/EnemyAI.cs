@@ -27,6 +27,7 @@ public class EnemyAI : MonoBehaviour
     [Header("Edge Detection")]
     [SerializeField] private Transform edgeCheck;
     [SerializeField] private float edgeCheckDistance = 0.5f;
+    public Transform enemyImage; // to flip the actual enemy
 
     [Header("Attack Parameters")] 
     [SerializeField] private AttackScript attack;
@@ -34,7 +35,7 @@ public class EnemyAI : MonoBehaviour
     
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
-    private Animator animator;
+    public Animator animator;
     
  
     private EnemyState currentState;
@@ -65,7 +66,7 @@ public class EnemyAI : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+       // animator = GetComponent<Animator>();
         attackTargetingRange = attack.targetingRange;
         
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -279,6 +280,7 @@ private void HandleAttacking()
         if (attack != null && attack.CanFire())
         {
             StartCoroutine(attack.Fire(directionToPlayer));
+                animator.SetTrigger("Shoot");
         }
     }
     
@@ -352,6 +354,22 @@ private void HandleAttacking()
                 waitTimer = waitTime;
             }
         }
+
+
+        if (Mathf.Abs(rb.velocity.x) > .1f ) 
+        {
+        
+            animator. SetBool("IsWalking",true);
+
+        }
+
+        else if (Mathf.Abs(rb.velocity.x) < .1f)
+        {
+
+            animator.SetBool("IsWalking", false);
+
+        }
+
     }
     
     private bool CanMove(float direction)
@@ -415,7 +433,9 @@ private void HandleAttacking()
         facingRight = !facingRight;
         spriteRenderer.flipX = !facingRight;
 
-      
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
     
     private void UpdateEdgeCheckPosition()
