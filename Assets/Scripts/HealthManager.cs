@@ -12,7 +12,7 @@ public class HealthManager : MonoBehaviour
     [Header("UI References")]
     public Image healthBar;
     public GameObject healthBarBase;
-    public GameObject gameOverScreen;
+    public GameObject youDiedUI;
     
     [Header("Player References")]
     public GameObject player;
@@ -32,6 +32,7 @@ public class HealthManager : MonoBehaviour
     public void Start()
     {
         currentHealth = maxHealth;
+        healthBarBase.SetActive(true);
         updateHealthBar();
         
         
@@ -49,7 +50,7 @@ public class HealthManager : MonoBehaviour
     {
         if (currentHealth <= 0)
         {
-            gameOverScreen.SetActive(true);
+            youDiedUI.SetActive(true);
             // playerScript.isPaused = true;
         }
     }

@@ -12,7 +12,7 @@ public class testAshSystem : MonoBehaviour
     public float currentAsh;
     public Image ashFill;
     public GameObject ashBase;
-    public GameObject winScreen;
+    public GameObject gameOverScreen;
     public float ashPerKill = 10f;
 
     [Header("Player Settings")]
@@ -46,7 +46,7 @@ public class testAshSystem : MonoBehaviour
         if (!hasWon && currentAsh >= maxAsh)
         {
             hasWon = true;
-            winScreen.SetActive(true);
+            gameOverScreen.SetActive(true);
         }
     }
 
