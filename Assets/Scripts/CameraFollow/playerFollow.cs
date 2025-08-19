@@ -21,14 +21,16 @@ public class playerFollow : MonoBehaviour
 
 
     // Update is called once per frame
-    void FixedUpdate()
+    void LateUpdate()
 
     {
-       // Vector3 desiredPosition = transform.position;
+        Vector3 desiredPosition = player.position + offset;
 
+        // Smooth transition
+        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
 
-
-        transform.position = player.position + offset;
+        // Only move the camera, NOT the player
+        transform.position = smoothedPosition;
 
         if (playerController.isflipped)
         
