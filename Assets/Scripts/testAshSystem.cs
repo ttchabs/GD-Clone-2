@@ -13,7 +13,7 @@ public class testAshSystem : MonoBehaviour
     public Image ashFill;
     public GameObject ashBase;
     public GameObject gameOverScreen;
-    public float ashPerKill = 10f;
+    public float ashPerKill = 5f;
 
     [Header("Player Settings")]
 
