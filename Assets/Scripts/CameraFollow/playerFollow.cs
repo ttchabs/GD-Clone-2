@@ -11,11 +11,11 @@ public class playerFollow : MonoBehaviour
 
     public Vector3 offset;
 
-    private PlayerController playerController;
+    public PlayerController playerController;
 
-    private void Start()
+    private void Awake()
     {
-        playerController = GetComponent<PlayerController>();
+        //playerController = GetComponent<PlayerController>();
     }
 
 
