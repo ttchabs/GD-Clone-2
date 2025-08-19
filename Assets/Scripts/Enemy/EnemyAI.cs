@@ -225,7 +225,7 @@ public class EnemyAI : MonoBehaviour
     {
         // if (animator != null)
         // {
-        //     animator.SetTrigger("Attack");
+           animator.SetTrigger("Attack");
         // }
         float distanceToA = Vector2.Distance(transform.position, pointA.position);
         float distanceToB = Vector2.Distance(transform.position, pointB.position);
@@ -330,10 +330,9 @@ private void HandleAttacking()
             case EnemyState.Waiting:
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 break;
-            
+
             case EnemyState.Attacking:
                 rb.velocity = new Vector2(0, rb.velocity.y);
-                SetState(EnemyState.Chasing);
                 return;
         }
         
