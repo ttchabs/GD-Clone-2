@@ -29,7 +29,7 @@ public class EnemyHealth : MonoBehaviour
  
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
-    private Animator animator;
+    //private Animator animator;
     private EnemyAI enemyAI;
     private AudioSource audioSource;
     
@@ -49,7 +49,7 @@ public class EnemyHealth : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+       // animator = GetComponent<Animator>();
         enemyAI = GetComponent<EnemyAI>();
         rbCollider = GetComponent<Collider2D>();
         audioSource = GetComponent<AudioSource>();
@@ -138,10 +138,10 @@ public class EnemyHealth : MonoBehaviour
         }
         
         // Trigger damage animation
-        if (animator != null)
-        {
-            animator.SetTrigger("TakeDamage");
-        }
+        //if (animator != null)
+        //{
+        //    animator.SetTrigger("TakeDamage");
+        //}
 
         if (particles != null)
         {
@@ -201,10 +201,10 @@ public class EnemyHealth : MonoBehaviour
             audioSource.PlayOneShot(explosionSound, explosionVolume);
         }
 
-        if (animator != null)
-        {
-            animator.SetTrigger("Die");
-        }
+        //if (///animator != null)
+        //{
+        //   // animator.SetTrigger("Die");
+        //}
 
         if (enemyAI != null)
         {

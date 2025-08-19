@@ -351,7 +351,7 @@ public class PlayerController : MonoBehaviour
         // Flip weapons when player changes direction
         if (weaponSystem != null)
         {
-            weaponSystem.FlipWeapons(facingRight);
+           // weaponSystem.FlipWeapons(facingRight);
         }
     }
     
