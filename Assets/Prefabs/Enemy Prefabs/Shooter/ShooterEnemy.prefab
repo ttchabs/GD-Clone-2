@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47348075020030907}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -28.257305, y: -14.133906, z: 0.6854652}
   m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
   m_ConstrainProportionsScale: 1
@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4998f1c399c9a41b55d0dd2becb1b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 50
   invulnerabilityTime: 0.5
   knockbackForce: 5
   knockbackDuration: 0.2
@@ -236,12 +236,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb218ee552747d439e81a3c72b2e81f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRanged: 0
   projectilePrefab: {fileID: 4412860930724851946, guid: ef80863a05f594a4e8c32944f95d1d34, type: 3}
   firePoint: {fileID: 5642405417855320107}
   projectileSpeed: 5
   projectileLifetime: 3
   projectileDamage: 10
   targetingRange: 4
+  meleeTime: 0.3
+  meleeDamage: 0
+  meleeCollider: {fileID: 0}
   muzzleFlash: {fileID: 0}
   muzzleFlashDuration: 0.1
 --- !u!95 &7382561513665434214
@@ -309,12 +313,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb218ee552747d439e81a3c72b2e81f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRanged: 0
   projectilePrefab: {fileID: 4412860930724851946, guid: ef80863a05f594a4e8c32944f95d1d34, type: 3}
   firePoint: {fileID: 3320102720292448396}
   projectileSpeed: 0
   projectileLifetime: 0.2
   projectileDamage: 10
   targetingRange: 2
+  meleeTime: 0.3
+  meleeDamage: 0
+  meleeCollider: {fileID: 0}
   muzzleFlash: {fileID: 0}
   muzzleFlashDuration: 0.1
 --- !u!1 &4636375808901589893

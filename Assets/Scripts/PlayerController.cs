@@ -392,8 +392,8 @@ public class PlayerController : MonoBehaviour
     
     private void CheckWallTouch()
     {
-        isTouchingWallLeft = Physics2D.Raycast(wallCheckLeft.position, Vector2.left, wallCheckDistance, groundLayerMask);
-        isTouchingWallRight = Physics2D.Raycast(wallCheckRight.position, Vector2.right, wallCheckDistance, groundLayerMask);
+        isTouchingWallLeft = Physics2D.Raycast(wallCheckLeft.position, Vector2.left, 5, groundLayerMask);
+        isTouchingWallRight = Physics2D.Raycast(wallCheckRight.position, Vector2.right, 5, groundLayerMask);
         isTouchingWall = isTouchingWallLeft || isTouchingWallRight;
     }
 
