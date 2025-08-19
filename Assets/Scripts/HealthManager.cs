@@ -139,7 +139,7 @@ public class HealthManager : MonoBehaviour
     {
         return isInvulnerable;
     }
-    
+
     public IEnumerator PlayerDied()
     {
         yield return new WaitForSeconds(0f);
@@ -147,17 +147,21 @@ public class HealthManager : MonoBehaviour
         {
             characterController.enabled = false;
         }
-        
+
         if (player != null && playerWaitingPoint != null)
         {
             player.transform.position = playerWaitingPoint.transform.position;
         }
-        
+
         yield return new WaitForSeconds(0.5f);
-        
+
         if (characterController != null)
         {
             characterController.enabled = true;
         }
+        RespawnPlayer respawnPlayer = GetComponent<RespawnPlayer>();
+
+        
+        respawnPlayer.Respawn();
     }
 }

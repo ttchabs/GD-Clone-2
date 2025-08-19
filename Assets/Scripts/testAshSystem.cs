@@ -26,6 +26,11 @@ public class testAshSystem : MonoBehaviour
 
     private bool hasWon = false;
 
+    public void Awake()
+    {
+                gameOverScreen.SetActive(false);
+
+    }
 
     public void Start()
     {
