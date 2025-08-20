@@ -64,8 +64,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0028147632, y: 0.05311237}
-  m_Size: {x: 0.30296573, y: 0.83600724}
+  m_Offset: {x: -0.025993308, y: 0.023328213}
+  m_Size: {x: 0.24535047, y: 0.77643985}
   m_Direction: 0
 --- !u!1 &239913167021718588
 GameObject:
@@ -459,8 +459,8 @@ Transform:
   m_GameObject: {fileID: 3204763329534210279}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.74741936, w: -0.66435266}
-  m_LocalPosition: {x: -1.3376054, y: 0.19503292, z: 0}
-  m_LocalScale: {x: -0.41459984, y: 0.4197999, z: 0.4}
+  m_LocalPosition: {x: -1.84, y: 0.14, z: -0}
+  m_LocalScale: {x: -0.41459984, y: 0.69535655, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1261288444561860665}
@@ -574,6 +574,7 @@ MonoBehaviour:
   meleeCollider: {fileID: 0}
   muzzleFlash: {fileID: 0}
   muzzleFlashDuration: 0.1
+  animator: {fileID: 0}
 --- !u!1 &5506971742415263764
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,8 +778,8 @@ PolygonCollider2D:
     m_Paths:
     - - {x: 0.16911423, y: 0.9475821}
       - {x: -0.05932975, y: 0.94832397}
-      - {x: -0.4314401, y: -0.28866667}
-      - {x: 0.5198878, y: -0.28701603}
+      - {x: -0.12480685, y: -0.28866667}
+      - {x: 0.2582649, y: -0.28138974}
   m_UseDelaunayMesh: 0
 --- !u!114 &7432202056765320631
 MonoBehaviour:
@@ -811,6 +812,8 @@ MonoBehaviour:
   enemyImage: {fileID: 0}
   attack: {fileID: 3525292595439817078}
   attackCooldown: 0.5
+  meleeAttackRange: 2.5
+  shooterAttackRange: 5
   animator: {fileID: 1861716757479975070}
   attackPoint: {fileID: 1848324374194500139}
 --- !u!114 &7111587469229787211
@@ -825,7 +828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd4998f1c399c9a41b55d0dd2becb1b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 35
   invulnerabilityTime: 0.5
   knockbackForce: 5
   knockbackDuration: 0.2
@@ -888,6 +891,7 @@ MonoBehaviour:
   meleeCollider: {fileID: 8491547091759418474}
   muzzleFlash: {fileID: 0}
   muzzleFlashDuration: 0.1
+  animator: {fileID: 0}
 --- !u!1 &6525396075628050533
 GameObject:
   m_ObjectHideFlags: 0

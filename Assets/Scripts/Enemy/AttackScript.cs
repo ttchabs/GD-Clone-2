@@ -25,6 +25,8 @@ public class AttackScript : MonoBehaviour
     [Header("Visual Effects")]
     [SerializeField] private GameObject muzzleFlash;
     [SerializeField] private float muzzleFlashDuration = 0.1f;
+
+    public Animator animator;
     
     private bool isFiring = false;
     
@@ -72,8 +74,8 @@ public class AttackScript : MonoBehaviour
         isFiring = true;
         
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-        
-        ProjectileScript projectileScript = projectile.GetComponent<ProjectileScript>();
+        animator.SetTrigger("Shoot"); // shooot ___________________________________________________________________________________________
+    ProjectileScript projectileScript = projectile.GetComponent<ProjectileScript>();
         if (projectileScript != null)
         { 
             projectileScript.SetDirection(direction > 0);

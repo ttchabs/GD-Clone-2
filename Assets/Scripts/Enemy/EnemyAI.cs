@@ -304,7 +304,7 @@ private void HandleAttacking()
         if (attack != null && attack.CanFire())
         {
             StartCoroutine(attack.Fire(directionToPlayer));
-                animator.SetTrigger("Shoot");
+              //  animator.SetTrigger("Shoot");
         }
     }
     
