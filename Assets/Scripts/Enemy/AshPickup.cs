@@ -12,20 +12,20 @@ public class AshPickup : MonoBehaviour
 
     private bool playerRange;
 
-    private AshSystem1 ashManager;
+    //private AshSystem1 ashManager;
 
     private testAshSystem testAshManager;
 
     // Start is called before the first frame update
     private void OnEnable()
     {
-        ashManager = FindFirstObjectByType<AshSystem1>();
+        //ashManager = FindFirstObjectByType<AshSystem1>();
         testAshManager = FindFirstObjectByType<testAshSystem>();
     }
 
     void Start()
     {
-        ashManager = FindFirstObjectByType<AshSystem1>();
+        //ashManager = FindFirstObjectByType<AshSystem1>();
         
         //print(ashManager);
     }
@@ -36,7 +36,7 @@ public class AshPickup : MonoBehaviour
         if (playerRange && Input.GetKeyDown(interactKey))
         {
             print("ASH COLLECTED");
-            ashManager.addDeath();
+            //ashManager.addDeath();
             //testAshManager.addAsh(ashAmount);
             testAshManager.EnemyKilled();
             gameObject.SetActive(false);
@@ -46,13 +46,6 @@ public class AshPickup : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (ashManager != null)
-        {
-            playerRange = other.collider.CompareTag("Player");
-            if (other.collider.CompareTag("Player"))
-            {
-                
-            }
-        }
+        playerRange = other.collider.CompareTag("Player");
     }
 }

@@ -281,6 +281,7 @@ GameObject:
   - component: {fileID: 7992050994597701695}
   - component: {fileID: 4545025430259868386}
   - component: {fileID: 4726792462367305979}
+  - component: {fileID: 2662401609912039892}
   m_Layer: 0
   m_Name: ashPrefab
   m_TagString: Untagged
@@ -5199,6 +5200,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.45, y: 0.02}
   m_EdgeRadius: 0
+--- !u!114 &2662401609912039892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6321718314102759470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf306cd8c35cb1448fbc0fd065bc044, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider: {fileID: 6455193808783039812}
+  interactKey: 101
+  ashAmount: 10
 --- !u!1 &6650483623882903999
 GameObject:
   m_ObjectHideFlags: 0
