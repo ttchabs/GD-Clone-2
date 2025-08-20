@@ -170,7 +170,7 @@ public class WeaponBehavior : MonoBehaviour
             playerAnimator.SetTrigger("ScytheAttack");
         }
 
-        DealDamage(Physics2D.OverlapCircleAll(transform.position, 0.5f, enemyLayerMask));
+        DealDamage(Physics2D.OverlapCircleAll(transform.position, 1.5f, enemyLayerMask));
         // Check for overlapping enemies and damage them
         
         Debug.Log("Scythe attack triggered");

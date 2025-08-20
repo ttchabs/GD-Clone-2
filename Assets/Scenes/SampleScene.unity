@@ -101958,6 +101958,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.99869424
       objectReference: {fileID: 0}
+    - target: {fileID: 3303197281227373116, guid: 886549903c48bdc4f84283b0f00b21ec, type: 3}
+      propertyPath: shooterAttackRange
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3320102720292448396, guid: 886549903c48bdc4f84283b0f00b21ec, type: 3}
       propertyPath: m_LocalPosition.x
       value: 32.3
