@@ -4,43 +4,35 @@ using UnityEngine;
 
 public class playerFollow : MonoBehaviour
 {
-    // Start is called before the first frame update
     public Transform player;
-
     public float smoothSpeed;
-
     public Vector3 offset;
 
     public PlayerController playerController;
 
+    private float originalX;   
+    private float flippedX = -0.4f;
+
     private void Awake()
     {
-        //playerController = GetComponent<PlayerController>();
+       
+        originalX = offset.x;
     }
 
-
-
-    // Update is called once per frame
     void LateUpdate()
-
     {
         Vector3 desiredPosition = player.position + offset;
-
-        // Smooth transition
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-
-        // Only move the camera, NOT the player
         transform.position = smoothedPosition;
 
+      
         if (playerController.isflipped)
-
         {
-            offset.x = -.4F;
-
-
+            offset.x = flippedX;
         }
-
-        else if (playerController.isflipped =false) 
-        { offset.x = .5f; }
+        else
+        {
+            offset.x = originalX;
+        }
     }
 }
