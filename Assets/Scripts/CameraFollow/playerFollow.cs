@@ -33,11 +33,14 @@ public class playerFollow : MonoBehaviour
         transform.position = smoothedPosition;
 
         if (playerController.isflipped)
-        
-        { 
-        //offset.x -= offset.x;
-            
-        
+
+        {
+            offset.x = -.4F;
+
+
         }
+
+        else if (playerController.isflipped =false) 
+        { offset.x = .5f; }
     }
 }

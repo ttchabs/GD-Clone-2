@@ -22310,6 +22310,10 @@ PrefabInstance:
       propertyPath: m_UpdateMode
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 620216381515325086, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1083203156532681774, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: inventoryUI
       value: 
@@ -22394,6 +22398,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4955160738216046703, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5379983966900648126, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: staminaUI
       value: 
@@ -22432,6 +22440,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6475634194649327566, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
       propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6890086979833584233, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7683797475560594291, guid: 969b8b2d4d44eb447a9d3a93b3e51e1f, type: 3}

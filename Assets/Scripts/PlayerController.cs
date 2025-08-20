@@ -336,6 +336,11 @@ public class PlayerController : MonoBehaviour
     transform.localScale = scale;
         isflipped = true;
 
+        if (rb.velocity.x > 0.1f)
+        {
+            isflipped = false;
+        }
+
     if (GrimReaper != null)
     {
         Vector3 grimScale = GrimReaper.localScale;
